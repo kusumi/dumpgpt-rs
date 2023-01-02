@@ -1,0 +1,46 @@
+pub const UUID_NODE_LEN: usize = 6;
+
+#[repr(C)] // should be packed
+#[derive(PartialEq, Debug, Default)]
+pub struct Uuid {
+    pub time_low: u32,
+    pub time_mid: u16,
+    pub time_hi_and_version: u16,
+    pub clock_seq_hi_and_reserved: u8,
+    pub clock_seq_low: u8,
+    pub node: [u8; UUID_NODE_LEN],
+}
+
+pub fn read_uuid_le(fp: &mut std::fs::File) -> Result<Uuid, std::io::Error> {
+    let mut uuid = Uuid {
+        ..Default::default()
+    };
+
+    uuid.time_low = crate::subr::read_le32(fp)?;
+    uuid.time_mid = crate::subr::read_le16(fp)?;
+    uuid.time_hi_and_version = crate::subr::read_le16(fp)?;
+    uuid.clock_seq_hi_and_reserved = crate::subr::read_u8(fp)?;
+    uuid.clock_seq_low = crate::subr::read_u8(fp)?;
+    for i in 0..UUID_NODE_LEN {
+        uuid.node[i] = crate::subr::read_u8(fp)?;
+    }
+
+    Ok(uuid)
+}
+
+pub fn uuid_to_string(u: &Uuid) -> String {
+    format!(
+        "{:08x}-{:04x}-{:04x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
+        u.time_low,
+        u.time_mid,
+        u.time_hi_and_version,
+        u.clock_seq_hi_and_reserved,
+        u.clock_seq_low,
+        u.node[0],
+        u.node[1],
+        u.node[2],
+        u.node[3],
+        u.node[4],
+        u.node[5]
+    )
+}
