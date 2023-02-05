@@ -2,7 +2,7 @@ mod gpt;
 mod subr;
 mod uuid;
 
-const VERSION: [i32; 3] = [0, 1, 0];
+const VERSION: [i32; 3] = [0, 1, 1];
 
 #[derive(Debug, Default)]
 struct UserOption {
@@ -49,7 +49,7 @@ fn main() {
 
     let matches = match opts.parse(&args[1..]) {
         Ok(v) => v,
-        Err(e) => panic!("{}", e.to_string()),
+        Err(e) => panic!("{}", e),
     };
     if matches.opt_present("v") {
         print_version();

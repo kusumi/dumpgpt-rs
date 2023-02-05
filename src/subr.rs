@@ -8,11 +8,11 @@ pub fn uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
 #[derive(PartialEq, Debug, Default)]
 struct KnownUuid {
     uuid: crate::uuid::Uuid,
-    name: String,
+    name: &'static str,
 }
 
-pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
-    let known_uuid: [KnownUuid; 64] = [
+fn get_known_uuid() -> [KnownUuid; 64] {
+    [
         KnownUuid {
             uuid: Uuid {
                 time_low: 0x00000000,
@@ -22,7 +22,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x00,
                 node: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
             },
-            name: String::from("UNUSED"),
+            name: "UNUSED",
         },
         KnownUuid {
             uuid: Uuid {
@@ -33,7 +33,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x4b,
                 node: [0x00, 0xa0, 0xc9, 0x3e, 0xc9, 0x3b],
             },
-            name: String::from("EFI"),
+            name: "EFI",
         },
         KnownUuid {
             uuid: Uuid {
@@ -44,7 +44,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x69,
                 node: [0x00, 0x08, 0xc7, 0x81, 0xf3, 0x9f],
             },
-            name: String::from("MBR"),
+            name: "MBR",
         },
         KnownUuid {
             uuid: Uuid {
@@ -55,7 +55,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xf8,
                 node: [0x00, 0x02, 0x2d, 0x09, 0x71, 0x2b],
             },
-            name: String::from("FREEBSD"),
+            name: "FREEBSD",
         },
         KnownUuid {
             uuid: Uuid {
@@ -66,7 +66,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x0b,
                 node: [0x00, 0x15, 0x60, 0xb8, 0x4f, 0x0f],
             },
-            name: String::from("FREEBSD_BOOT"),
+            name: "FREEBSD_BOOT",
         },
         KnownUuid {
             uuid: Uuid {
@@ -77,7 +77,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x04,
                 node: [0x00, 0xe0, 0x81, 0x28, 0x6a, 0xcf],
             },
-            name: String::from("FREEBSD_NANDFS"),
+            name: "FREEBSD_NANDFS",
         },
         KnownUuid {
             uuid: Uuid {
@@ -88,7 +88,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xf8,
                 node: [0x00, 0x02, 0x2d, 0x09, 0x71, 0x2b],
             },
-            name: String::from("FREEBSD_SWAP"),
+            name: "FREEBSD_SWAP",
         },
         KnownUuid {
             uuid: Uuid {
@@ -99,7 +99,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xf8,
                 node: [0x00, 0x02, 0x2d, 0x09, 0x71, 0x2b],
             },
-            name: String::from("FREEBSD_UFS"),
+            name: "FREEBSD_UFS",
         },
         KnownUuid {
             uuid: Uuid {
@@ -110,7 +110,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xf8,
                 node: [0x00, 0x02, 0x2d, 0x09, 0x71, 0x2b],
             },
-            name: String::from("FREEBSD_VINUM"),
+            name: "FREEBSD_VINUM",
         },
         KnownUuid {
             uuid: Uuid {
@@ -121,7 +121,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xf8,
                 node: [0x00, 0x02, 0x2d, 0x09, 0x71, 0x2b],
             },
-            name: String::from("FREEBSD_ZFS"),
+            name: "FREEBSD_ZFS",
         },
         KnownUuid {
             uuid: Uuid {
@@ -132,7 +132,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x26,
                 node: [0x8b, 0x49, 0x52, 0x1e, 0x5a, 0x8b],
             },
-            name: String::from("PREP_BOOT"),
+            name: "PREP_BOOT",
         },
         KnownUuid {
             uuid: Uuid {
@@ -143,7 +143,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xc0,
                 node: [0x68, 0xb6, 0xb7, 0x26, 0x99, 0xc7],
             },
-            name: String::from("MS_BASIC_DATA"),
+            name: "MS_BASIC_DATA",
         },
         KnownUuid {
             uuid: Uuid {
@@ -154,7 +154,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x68,
                 node: [0x33, 0x11, 0x71, 0x4a, 0x69, 0xad],
             },
-            name: String::from("MS_LDM_DATA"),
+            name: "MS_LDM_DATA",
         },
         KnownUuid {
             uuid: Uuid {
@@ -165,7 +165,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xd2,
                 node: [0xe1, 0xe9, 0x04, 0x34, 0xcf, 0xb3],
             },
-            name: String::from("MS_LDM_METADATA"),
+            name: "MS_LDM_METADATA",
         },
         KnownUuid {
             uuid: Uuid {
@@ -176,7 +176,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x6a,
                 node: [0xbf, 0xd5, 0x01, 0x79, 0xd6, 0xac],
             },
-            name: String::from("MS_RECOVERY"),
+            name: "MS_RECOVERY",
         },
         KnownUuid {
             uuid: Uuid {
@@ -187,7 +187,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x7d,
                 node: [0xf9, 0x2d, 0xf0, 0x02, 0x15, 0xae],
             },
-            name: String::from("MS_RESERVED"),
+            name: "MS_RESERVED",
         },
         KnownUuid {
             uuid: Uuid {
@@ -198,7 +198,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xa3,
                 node: [0xb0, 0x01, 0xe5, 0x6e, 0xfc, 0x2d],
             },
-            name: String::from("MS_SPACES"),
+            name: "MS_SPACES",
         },
         KnownUuid {
             uuid: Uuid {
@@ -209,7 +209,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x79,
                 node: [0x3d, 0x69, 0xd8, 0x47, 0x7d, 0xe4],
             },
-            name: String::from("LINUX_DATA"),
+            name: "LINUX_DATA",
         },
         KnownUuid {
             uuid: Uuid {
@@ -220,7 +220,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x06,
                 node: [0x74, 0x3f, 0x0f, 0x84, 0x91, 0x1e],
             },
-            name: String::from("LINUX_RAID"),
+            name: "LINUX_RAID",
         },
         KnownUuid {
             uuid: Uuid {
@@ -231,7 +231,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xe5,
                 node: [0x09, 0x33, 0xc8, 0x4b, 0x4f, 0x4f],
             },
-            name: String::from("LINUX_SWAP"),
+            name: "LINUX_SWAP",
         },
         KnownUuid {
             uuid: Uuid {
@@ -242,7 +242,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x3c,
                 node: [0x23, 0x8f, 0x2a, 0x3d, 0xf9, 0x28],
             },
-            name: String::from("LINUX_LVM"),
+            name: "LINUX_LVM",
         },
         KnownUuid {
             uuid: Uuid {
@@ -253,7 +253,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x90,
                 node: [0x00, 0x0c, 0x29, 0x11, 0xd1, 0xb8],
             },
-            name: String::from("VMFS"),
+            name: "VMFS",
         },
         KnownUuid {
             uuid: Uuid {
@@ -264,7 +264,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x97,
                 node: [0x00, 0x0c, 0x29, 0x11, 0xd1, 0xb8],
             },
-            name: String::from("VMKDIAG"),
+            name: "VMKDIAG",
         },
         KnownUuid {
             uuid: Uuid {
@@ -275,7 +275,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x78,
                 node: [0x00, 0x0c, 0x29, 0x11, 0xd1, 0xb8],
             },
-            name: String::from("VMRESERVED"),
+            name: "VMRESERVED",
         },
         KnownUuid {
             uuid: Uuid {
@@ -286,7 +286,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xee,
                 node: [0x00, 0x0c, 0x29, 0x11, 0xd0, 0xb2],
             },
-            name: String::from("VMVSANHDR"),
+            name: "VMVSANHDR",
         },
         KnownUuid {
             uuid: Uuid {
@@ -297,7 +297,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x11,
                 node: [0x00, 0x30, 0x65, 0x43, 0xec, 0xac],
             },
-            name: String::from("APPLE_BOOT"),
+            name: "APPLE_BOOT",
         },
         KnownUuid {
             uuid: Uuid {
@@ -308,7 +308,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x11,
                 node: [0x00, 0x30, 0x65, 0x43, 0xec, 0xac],
             },
-            name: String::from("APPLE_HFS"),
+            name: "APPLE_HFS",
         },
         KnownUuid {
             uuid: Uuid {
@@ -319,7 +319,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x11,
                 node: [0x00, 0x30, 0x65, 0x43, 0xec, 0xac],
             },
-            name: String::from("APPLE_UFS"),
+            name: "APPLE_UFS",
         },
         KnownUuid {
             uuid: Uuid {
@@ -330,7 +330,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xa6,
                 node: [0x08, 0x00, 0x20, 0x73, 0x66, 0x31],
             },
-            name: String::from("APPLE_ZFS"),
+            name: "APPLE_ZFS",
         },
         KnownUuid {
             uuid: Uuid {
@@ -341,7 +341,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x22,
                 node: [0x00, 0x30, 0x65, 0x43, 0xec, 0xac],
             },
-            name: String::from("APPLE_RAID"),
+            name: "APPLE_RAID",
         },
         KnownUuid {
             uuid: Uuid {
@@ -352,7 +352,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x22,
                 node: [0x00, 0x30, 0x65, 0x43, 0xec, 0xac],
             },
-            name: String::from("APPLE_RAID_OFFLINE"),
+            name: "APPLE_RAID_OFFLINE",
         },
         KnownUuid {
             uuid: Uuid {
@@ -363,7 +363,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x11,
                 node: [0x00, 0x30, 0x65, 0x43, 0xec, 0xac],
             },
-            name: String::from("APPLE_LABEL"),
+            name: "APPLE_LABEL",
         },
         KnownUuid {
             uuid: Uuid {
@@ -374,7 +374,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x11,
                 node: [0x00, 0x30, 0x65, 0x43, 0xec, 0xac],
             },
-            name: String::from("APPLE_TV_RECOVERY"),
+            name: "APPLE_TV_RECOVERY",
         },
         KnownUuid {
             uuid: Uuid {
@@ -385,7 +385,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x11,
                 node: [0x00, 0x30, 0x65, 0x43, 0xec, 0xac],
             },
-            name: String::from("APPLE_CORE_STORAGE"),
+            name: "APPLE_CORE_STORAGE",
         },
         KnownUuid {
             uuid: Uuid {
@@ -396,7 +396,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x11,
                 node: [0x00, 0x30, 0x65, 0x43, 0xec, 0xac],
             },
-            name: String::from("APPLE_APFS"),
+            name: "APPLE_APFS",
         },
         KnownUuid {
             uuid: Uuid {
@@ -407,7 +407,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x9b,
                 node: [0x00, 0x19, 0xd1, 0x87, 0x96, 0x48],
             },
-            name: String::from("NETBSD_FFS"),
+            name: "NETBSD_FFS",
         },
         KnownUuid {
             uuid: Uuid {
@@ -418,7 +418,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x9b,
                 node: [0x00, 0x19, 0xd1, 0x87, 0x96, 0x48],
             },
-            name: String::from("NETBSD_LFS"),
+            name: "NETBSD_LFS",
         },
         KnownUuid {
             uuid: Uuid {
@@ -429,7 +429,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x9B,
                 node: [0x00, 0x19, 0xd1, 0x87, 0x96, 0x48],
             },
-            name: String::from("NETBSD_SWAP"),
+            name: "NETBSD_SWAP",
         },
         KnownUuid {
             uuid: Uuid {
@@ -440,7 +440,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x9b,
                 node: [0x00, 0x19, 0xd1, 0x87, 0x96, 0x48],
             },
-            name: String::from("NETBSD_RAID"),
+            name: "NETBSD_RAID",
         },
         KnownUuid {
             uuid: Uuid {
@@ -451,7 +451,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x9b,
                 node: [0x00, 0x19, 0xd1, 0x87, 0x96, 0x48],
             },
-            name: String::from("NETBSD_CCD"),
+            name: "NETBSD_CCD",
         },
         KnownUuid {
             uuid: Uuid {
@@ -462,7 +462,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x9b,
                 node: [0x00, 0x19, 0xd1, 0x87, 0x96, 0x48],
             },
-            name: String::from("NETBSD_CGD"),
+            name: "NETBSD_CGD",
         },
         KnownUuid {
             uuid: Uuid {
@@ -473,7 +473,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x17,
                 node: [0x01, 0x30, 0x1b, 0xb8, 0xa9, 0xf5],
             },
-            name: String::from("DRAGONFLY_LABEL32"),
+            name: "DRAGONFLY_LABEL32",
         },
         KnownUuid {
             uuid: Uuid {
@@ -484,7 +484,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x17,
                 node: [0x01, 0x30, 0x1b, 0xb8, 0xa9, 0xf5],
             },
-            name: String::from("DRAGONFLY_SWAP"),
+            name: "DRAGONFLY_SWAP",
         },
         KnownUuid {
             uuid: Uuid {
@@ -495,7 +495,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x17,
                 node: [0x01, 0x30, 0x1b, 0xb8, 0xa9, 0xf5],
             },
-            name: String::from("DRAGONFLY_UFS1"),
+            name: "DRAGONFLY_UFS1",
         },
         KnownUuid {
             uuid: Uuid {
@@ -506,7 +506,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x17,
                 node: [0x01, 0x30, 0x1b, 0xb8, 0xa9, 0xf5],
             },
-            name: String::from("DRAGONFLY_VINUM"),
+            name: "DRAGONFLY_VINUM",
         },
         KnownUuid {
             uuid: Uuid {
@@ -517,7 +517,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x17,
                 node: [0x01, 0x30, 0x1b, 0xb8, 0xa9, 0xf5],
             },
-            name: String::from("DRAGONFLY_CCD"),
+            name: "DRAGONFLY_CCD",
         },
         KnownUuid {
             uuid: Uuid {
@@ -528,7 +528,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x96,
                 node: [0x01, 0x30, 0x1b, 0xb8, 0xa9, 0xf5],
             },
-            name: String::from("DRAGONFLY_LABEL64"),
+            name: "DRAGONFLY_LABEL64",
         },
         KnownUuid {
             uuid: Uuid {
@@ -539,7 +539,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x96,
                 node: [0x01, 0x30, 0x1b, 0xb8, 0xa9, 0xf5],
             },
-            name: String::from("DRAGONFLY_LEGACY"),
+            name: "DRAGONFLY_LEGACY",
         },
         KnownUuid {
             uuid: Uuid {
@@ -550,7 +550,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x13,
                 node: [0x01, 0x30, 0x1b, 0xb8, 0xa9, 0xf5],
             },
-            name: String::from("DRAGONFLY_HAMMER"),
+            name: "DRAGONFLY_HAMMER",
         },
         KnownUuid {
             uuid: Uuid {
@@ -561,7 +561,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x4d,
                 node: [0x01, 0x30, 0x1b, 0xb8, 0xa9, 0xf5],
             },
-            name: String::from("DRAGONFLY_HAMMER2"),
+            name: "DRAGONFLY_HAMMER2",
         },
         KnownUuid {
             uuid: Uuid {
@@ -572,7 +572,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x7a,
                 node: [0xd4, 0xbb, 0x9b, 0xe3, 0xc1, 0xd3],
             },
-            name: String::from("CHROMEOS_FIRMWARE"),
+            name: "CHROMEOS_FIRMWARE",
         },
         KnownUuid {
             uuid: Uuid {
@@ -583,7 +583,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x25,
                 node: [0xac, 0xcc, 0x32, 0x85, 0xa3, 0x09],
             },
-            name: String::from("CHROMEOS_KERNEL"),
+            name: "CHROMEOS_KERNEL",
         },
         KnownUuid {
             uuid: Uuid {
@@ -594,7 +594,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x37,
                 node: [0xb1, 0x51, 0x92, 0xcb, 0x1b, 0x5e],
             },
-            name: String::from("CHROMEOS_RESERVED"),
+            name: "CHROMEOS_RESERVED",
         },
         KnownUuid {
             uuid: Uuid {
@@ -605,7 +605,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x3c,
                 node: [0x7f, 0xf2, 0xa1, 0x3c, 0xfc, 0xec],
             },
-            name: String::from("CHROMEOS_ROOT"),
+            name: "CHROMEOS_ROOT",
         },
         KnownUuid {
             uuid: Uuid {
@@ -616,7 +616,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x0a,
                 node: [0x95, 0x25, 0x19, 0xad, 0x3f, 0x61],
             },
-            name: String::from("OPENBSD_DATA"),
+            name: "OPENBSD_DATA",
         },
         KnownUuid {
             uuid: Uuid {
@@ -627,7 +627,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xa6,
                 node: [0x08, 0x00, 0x20, 0x73, 0x66, 0x31],
             },
-            name: String::from("SOLARIS_BOOT"),
+            name: "SOLARIS_BOOT",
         },
         KnownUuid {
             uuid: Uuid {
@@ -638,7 +638,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xa6,
                 node: [0x08, 0x00, 0x20, 0x73, 0x66, 0x31],
             },
-            name: String::from("SOLARIS_ROOT"),
+            name: "SOLARIS_ROOT",
         },
         KnownUuid {
             uuid: Uuid {
@@ -649,7 +649,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xa6,
                 node: [0x08, 0x00, 0x20, 0x73, 0x66, 0x31],
             },
-            name: String::from("SOLARIS_SWAP"),
+            name: "SOLARIS_SWAP",
         },
         KnownUuid {
             uuid: Uuid {
@@ -660,7 +660,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xa6,
                 node: [0x08, 0x00, 0x20, 0x73, 0x66, 0x31],
             },
-            name: String::from("SOLARIS_BACKUP"),
+            name: "SOLARIS_BACKUP",
         },
         KnownUuid {
             uuid: Uuid {
@@ -671,7 +671,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xa6,
                 node: [0x08, 0x00, 0x20, 0x73, 0x66, 0x31],
             },
-            name: String::from("SOLARIS_VAR"),
+            name: "SOLARIS_VAR",
         },
         KnownUuid {
             uuid: Uuid {
@@ -682,7 +682,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xa6,
                 node: [0x08, 0x00, 0x20, 0x73, 0x66, 0x31],
             },
-            name: String::from("SOLARIS_HOME"),
+            name: "SOLARIS_HOME",
         },
         KnownUuid {
             uuid: Uuid {
@@ -693,7 +693,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xa6,
                 node: [0x08, 0x00, 0x20, 0x73, 0x66, 0x31],
             },
-            name: String::from("SOLARIS_ALTSEC"),
+            name: "SOLARIS_ALTSEC",
         },
         KnownUuid {
             uuid: Uuid {
@@ -704,7 +704,7 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0xa6,
                 node: [0x08, 0x00, 0x20, 0x73, 0x66, 0x31],
             },
-            name: String::from("SOLARIS_RESERVED"),
+            name: "SOLARIS_RESERVED",
         },
         KnownUuid {
             uuid: Uuid {
@@ -715,16 +715,18 @@ pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
                 clock_seq_low: 0x4e,
                 node: [0x65, 0x65, 0x64, 0x45, 0x46, 0x49],
             },
-            name: String::from("BIOS_BOOT"),
+            name: "BIOS_BOOT",
         },
-    ];
+    ]
+}
 
+pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
     assert!(is_le());
 
-    for x in known_uuid {
+    for x in get_known_uuid().iter() {
         if *uuid == x.uuid {
             assert!(x.name.len() <= 36);
-            return x.name;
+            return String::from(x.name);
         }
     }
     String::from("")
@@ -754,4 +756,67 @@ pub fn read_le32(fp: &mut std::fs::File) -> Result<u32, std::io::Error> {
 
 pub fn read_le64(fp: &mut std::fs::File) -> Result<u64, std::io::Error> {
     fp.read_u64::<byteorder::LittleEndian>()
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_uuid_to_str() {
+        let u = crate::uuid::Uuid {
+            ..crate::uuid::Uuid::default()
+        };
+        assert_eq!(
+            super::uuid_to_str(&u),
+            "00000000-0000-0000-0000-000000000000"
+        );
+    }
+
+    #[test]
+    fn test_known_uuid() {
+        let known_uuid = super::get_known_uuid();
+        let mut n = 0;
+        for (i, a) in known_uuid.iter().enumerate() {
+            for (j, b) in known_uuid.iter().enumerate() {
+                if i == j {
+                    n += 1;
+                    continue;
+                }
+                assert_ne!(a.uuid, b.uuid);
+                assert_ne!(a.name, b.name);
+                assert!(!a.name.is_empty());
+                assert!(!b.name.is_empty());
+            }
+        }
+        assert_eq!(n, known_uuid.len());
+    }
+
+    #[test]
+    fn test_known_uuid_to_str() {
+        let u = crate::uuid::Uuid {
+            time_low: 0x516e7cb4,
+            time_mid: 0x6ecf,
+            time_hi_and_version: 0x11d6,
+            clock_seq_hi_and_reserved: 0x8f,
+            clock_seq_low: 0xf8,
+            node: [0x00, 0x02, 0x2d, 0x09, 0x71, 0x2b],
+        };
+        assert_eq!(super::known_uuid_to_str(&u), "FREEBSD");
+
+        let u = crate::uuid::Uuid {
+            time_low: 0x416e7cb4,
+            time_mid: 0x6ecf,
+            time_hi_and_version: 0x11d6,
+            clock_seq_hi_and_reserved: 0x8f,
+            clock_seq_low: 0xf8,
+            node: [0x00, 0x02, 0x2d, 0x09, 0x71, 0x2b],
+        };
+        assert_eq!(super::known_uuid_to_str(&u), "");
+    }
+
+    #[test]
+    fn test_ds() {
+        assert_eq!(std::mem::size_of::<crate::gpt::GptHdr>(), 92 + 4);
+        assert_eq!(std::mem::size_of::<crate::gpt::GptEnt>(), 128);
+        assert_eq!(std::mem::size_of::<crate::uuid::Uuid>(), 16);
+    }
 }
