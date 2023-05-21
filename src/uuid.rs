@@ -1,3 +1,5 @@
+use crate::subr;
+
 pub const UUID_NODE_LEN: usize = 6;
 
 #[repr(C)] // should be packed
@@ -11,18 +13,18 @@ pub struct Uuid {
     pub node: [u8; UUID_NODE_LEN],
 }
 
-pub fn read_uuid_le(fp: &mut std::fs::File) -> Result<Uuid, std::io::Error> {
+pub fn read_uuid_le(fp: &mut std::fs::File) -> std::io::Result<Uuid> {
     let mut uuid = Uuid {
         ..Default::default()
     };
 
-    uuid.time_low = crate::subr::read_le32(fp)?;
-    uuid.time_mid = crate::subr::read_le16(fp)?;
-    uuid.time_hi_and_version = crate::subr::read_le16(fp)?;
-    uuid.clock_seq_hi_and_reserved = crate::subr::read_u8(fp)?;
-    uuid.clock_seq_low = crate::subr::read_u8(fp)?;
+    uuid.time_low = subr::read_le32(fp)?;
+    uuid.time_mid = subr::read_le16(fp)?;
+    uuid.time_hi_and_version = subr::read_le16(fp)?;
+    uuid.clock_seq_hi_and_reserved = subr::read_u8(fp)?;
+    uuid.clock_seq_low = subr::read_u8(fp)?;
     for i in 0..UUID_NODE_LEN {
-        uuid.node[i] = crate::subr::read_u8(fp)?;
+        uuid.node[i] = subr::read_u8(fp)?;
     }
 
     Ok(uuid)

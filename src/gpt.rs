@@ -1,3 +1,6 @@
+use crate::subr;
+use crate::uuid;
+use crate::UserData;
 use std::io::Seek;
 
 const UNIT_SIZE: usize = 512;
@@ -14,7 +17,7 @@ pub struct GptHdr {
     pub hdr_lba_alt: u64,
     pub hdr_lba_start: u64,
     pub hdr_lba_end: u64,
-    pub hdr_uuid: crate::uuid::Uuid,
+    pub hdr_uuid: uuid::Uuid,
     pub hdr_lba_table: u64,
     pub hdr_entries: u32,
     pub hdr_entsz: u32,
@@ -25,8 +28,8 @@ pub struct GptHdr {
 #[repr(C)] // should be packed
 #[derive(PartialEq, Debug, Default)]
 pub struct GptEnt {
-    pub ent_type: crate::uuid::Uuid,
-    pub ent_uuid: crate::uuid::Uuid,
+    pub ent_type: uuid::Uuid,
+    pub ent_uuid: uuid::Uuid,
     pub ent_lba_start: u64,
     pub ent_lba_end: u64,
     pub ent_attr: u64,
@@ -37,22 +40,18 @@ pub struct GptEnt {
     pub ent_name2: [u16; 18],
 }
 
-fn try_known_uuid_to_str(uuid: &crate::uuid::Uuid, dat: &crate::UserData) -> String {
+fn try_known_uuid_to_str(uuid: &uuid::Uuid, dat: &UserData) -> String {
     if dat.opt.symbol {
-        let s = crate::subr::known_uuid_to_str(uuid);
+        let s = subr::known_uuid_to_str(uuid);
         if !s.is_empty() {
             return s;
         }
     }
 
-    crate::subr::uuid_to_str(uuid)
+    subr::uuid_to_str(uuid)
 }
 
-fn dump_header(
-    fp: &mut std::fs::File,
-    hdr_lba: u64,
-    dat: &crate::UserData,
-) -> Result<GptHdr, std::io::Error> {
+fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, dat: &UserData) -> std::io::Result<GptHdr> {
     let hdr_offset = hdr_lba * UNIT_SIZE as u64;
     fp.seek(std::io::SeekFrom::Start(hdr_offset))?;
 
@@ -61,22 +60,22 @@ fn dump_header(
     };
     // why can't Rust easily read(2) + handle blob ?
     for i in 0..8 {
-        hdr.hdr_sig[i] = crate::subr::read_u8(fp)?;
+        hdr.hdr_sig[i] = subr::read_u8(fp)?;
     }
-    hdr.hdr_revision = crate::subr::read_le32(fp)?;
-    hdr.hdr_size = crate::subr::read_le32(fp)?;
-    hdr.hdr_crc_self = crate::subr::read_le32(fp)?;
-    hdr.reserved = crate::subr::read_le32(fp)?;
-    hdr.hdr_lba_self = crate::subr::read_le64(fp)?;
-    hdr.hdr_lba_alt = crate::subr::read_le64(fp)?;
-    hdr.hdr_lba_start = crate::subr::read_le64(fp)?;
-    hdr.hdr_lba_end = crate::subr::read_le64(fp)?;
-    hdr.hdr_uuid = crate::uuid::read_uuid_le(fp)?;
-    hdr.hdr_lba_table = crate::subr::read_le64(fp)?;
-    hdr.hdr_entries = crate::subr::read_le32(fp)?;
-    hdr.hdr_entsz = crate::subr::read_le32(fp)?;
-    hdr.hdr_crc_table = crate::subr::read_le32(fp)?;
-    hdr.padding = crate::subr::read_le32(fp)?;
+    hdr.hdr_revision = subr::read_le32(fp)?;
+    hdr.hdr_size = subr::read_le32(fp)?;
+    hdr.hdr_crc_self = subr::read_le32(fp)?;
+    hdr.reserved = subr::read_le32(fp)?;
+    hdr.hdr_lba_self = subr::read_le64(fp)?;
+    hdr.hdr_lba_alt = subr::read_le64(fp)?;
+    hdr.hdr_lba_start = subr::read_le64(fp)?;
+    hdr.hdr_lba_end = subr::read_le64(fp)?;
+    hdr.hdr_uuid = uuid::read_uuid_le(fp)?;
+    hdr.hdr_lba_table = subr::read_le64(fp)?;
+    hdr.hdr_entries = subr::read_le32(fp)?;
+    hdr.hdr_entsz = subr::read_le32(fp)?;
+    hdr.hdr_crc_table = subr::read_le32(fp)?;
+    hdr.padding = subr::read_le32(fp)?;
 
     println!(
         "sig      = \"{}{}{}{}{}{}{}{}\"",
@@ -118,11 +117,7 @@ fn dump_header(
     Ok(hdr)
 }
 
-fn dump_entries(
-    fp: &mut std::fs::File,
-    hdr: &GptHdr,
-    dat: &crate::UserData,
-) -> Result<(), std::io::Error> {
+fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, dat: &UserData) -> std::io::Result<()> {
     let lba_table_size = hdr.hdr_entsz * hdr.hdr_entries;
     let lba_table_sectors = lba_table_size / UNIT_SIZE as u32;
     let mut total = 0;
@@ -144,16 +139,16 @@ fn dump_entries(
                 ..Default::default()
             };
             // why can't Rust easily read(2) + handle blob ?
-            p.ent_type = crate::uuid::read_uuid_le(fp)?;
-            p.ent_uuid = crate::uuid::read_uuid_le(fp)?;
-            p.ent_lba_start = crate::subr::read_le64(fp)?;
-            p.ent_lba_end = crate::subr::read_le64(fp)?;
-            p.ent_attr = crate::subr::read_le64(fp)?;
+            p.ent_type = uuid::read_uuid_le(fp)?;
+            p.ent_uuid = uuid::read_uuid_le(fp)?;
+            p.ent_lba_start = subr::read_le64(fp)?;
+            p.ent_lba_end = subr::read_le64(fp)?;
+            p.ent_attr = subr::read_le64(fp)?;
             for k in 0..p.ent_name1.len() {
-                p.ent_name1[k] = crate::subr::read_le16(fp)?;
+                p.ent_name1[k] = subr::read_le16(fp)?;
             }
             for k in 0..p.ent_name2.len() {
-                p.ent_name2[k] = crate::subr::read_le16(fp)?;
+                p.ent_name2[k] = subr::read_le16(fp)?;
             }
 
             entry_offset += std::mem::size_of::<GptEnt>() as u64;
@@ -189,10 +184,7 @@ fn dump_entries(
                 p.ent_lba_start,
                 p.ent_lba_end,
                 p.ent_attr,
-                match std::str::from_utf8(&name[..nlen]) {
-                    Ok(v) => v,
-                    Err(e) => panic!("{}", e),
-                }
+                std::str::from_utf8(&name[..nlen]).unwrap()
             );
             total += 1;
         }
@@ -202,7 +194,7 @@ fn dump_entries(
     Ok(())
 }
 
-pub fn dump_gpt(fp: &mut std::fs::File, dat: &crate::UserData) -> Result<(), std::io::Error> {
+pub fn dump_gpt(fp: &mut std::fs::File, dat: &UserData) -> std::io::Result<()> {
     let mut hdr2 = GptHdr {
         ..Default::default()
     };

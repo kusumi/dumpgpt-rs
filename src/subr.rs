@@ -1,20 +1,21 @@
-use crate::uuid::Uuid;
+use crate::gpt;
+use crate::uuid;
 use byteorder::ReadBytesExt;
 
-pub fn uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
-    crate::uuid::uuid_to_string(uuid)
+pub fn uuid_to_str(uuid: &uuid::Uuid) -> String {
+    uuid::uuid_to_string(uuid)
 }
 
 #[derive(PartialEq, Debug, Default)]
 struct KnownUuid {
-    uuid: crate::uuid::Uuid,
+    uuid: uuid::Uuid,
     name: &'static str,
 }
 
 fn get_known_uuid() -> [KnownUuid; 64] {
     [
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x00000000,
                 time_mid: 0x0000,
                 time_hi_and_version: 0x0000,
@@ -25,7 +26,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "UNUSED",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xc12a7328,
                 time_mid: 0xf81f,
                 time_hi_and_version: 0x11d2,
@@ -36,7 +37,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "EFI",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x024dee41,
                 time_mid: 0x33e7,
                 time_hi_and_version: 0x11d3,
@@ -47,7 +48,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "MBR",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x516e7cb4,
                 time_mid: 0x6ecf,
                 time_hi_and_version: 0x11d6,
@@ -58,7 +59,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "FREEBSD",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x83bd6b9d,
                 time_mid: 0x7f41,
                 time_hi_and_version: 0x11dc,
@@ -69,7 +70,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "FREEBSD_BOOT",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x74ba7dd9,
                 time_mid: 0xa689,
                 time_hi_and_version: 0x11e1,
@@ -80,7 +81,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "FREEBSD_NANDFS",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x516e7cb5,
                 time_mid: 0x6ecf,
                 time_hi_and_version: 0x11d6,
@@ -91,7 +92,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "FREEBSD_SWAP",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x516e7cb6,
                 time_mid: 0x6ecf,
                 time_hi_and_version: 0x11d6,
@@ -102,7 +103,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "FREEBSD_UFS",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x516e7cb8,
                 time_mid: 0x6ecf,
                 time_hi_and_version: 0x11d6,
@@ -113,7 +114,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "FREEBSD_VINUM",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x516e7cba,
                 time_mid: 0x6ecf,
                 time_hi_and_version: 0x11d6,
@@ -124,7 +125,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "FREEBSD_ZFS",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x9e1a2d38,
                 time_mid: 0xc612,
                 time_hi_and_version: 0x4316,
@@ -135,7 +136,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "PREP_BOOT",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xebd0a0a2,
                 time_mid: 0xb9e5,
                 time_hi_and_version: 0x4433,
@@ -146,7 +147,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "MS_BASIC_DATA",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xaf9b60a0,
                 time_mid: 0x1431,
                 time_hi_and_version: 0x4f62,
@@ -157,7 +158,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "MS_LDM_DATA",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x5808c8aa,
                 time_mid: 0x7e8f,
                 time_hi_and_version: 0x42e0,
@@ -168,7 +169,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "MS_LDM_METADATA",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xde94bba4,
                 time_mid: 0x06d1,
                 time_hi_and_version: 0x4d40,
@@ -179,7 +180,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "MS_RECOVERY",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xe3c9e316,
                 time_mid: 0x0b5c,
                 time_hi_and_version: 0x4db8,
@@ -190,7 +191,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "MS_RESERVED",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xe75caf8f,
                 time_mid: 0xf680,
                 time_hi_and_version: 0x4cee,
@@ -201,7 +202,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "MS_SPACES",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x0fc63daf,
                 time_mid: 0x8483,
                 time_hi_and_version: 0x4772,
@@ -212,7 +213,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "LINUX_DATA",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xa19d880f,
                 time_mid: 0x05fc,
                 time_hi_and_version: 0x4d3b,
@@ -223,7 +224,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "LINUX_RAID",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x0657fd6d,
                 time_mid: 0xa4ab,
                 time_hi_and_version: 0x43c4,
@@ -234,7 +235,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "LINUX_SWAP",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xe6d6d379,
                 time_mid: 0xf507,
                 time_hi_and_version: 0x44c2,
@@ -245,7 +246,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "LINUX_LVM",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xaa31e02a,
                 time_mid: 0x400f,
                 time_hi_and_version: 0x11db,
@@ -256,7 +257,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "VMFS",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x9d275380,
                 time_mid: 0x40ad,
                 time_hi_and_version: 0x11db,
@@ -267,7 +268,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "VMKDIAG",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x9198effc,
                 time_mid: 0x31c0,
                 time_hi_and_version: 0x11db,
@@ -278,7 +279,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "VMRESERVED",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x381cfccc,
                 time_mid: 0x7288,
                 time_hi_and_version: 0x11e0,
@@ -289,7 +290,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "VMVSANHDR",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x426F6F74,
                 time_mid: 0x0000,
                 time_hi_and_version: 0x11aa,
@@ -300,7 +301,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "APPLE_BOOT",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x48465300,
                 time_mid: 0x0000,
                 time_hi_and_version: 0x11aa,
@@ -311,7 +312,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "APPLE_HFS",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x55465300,
                 time_mid: 0x0000,
                 time_hi_and_version: 0x11aa,
@@ -322,7 +323,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "APPLE_UFS",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x6a898cc3,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
@@ -333,7 +334,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "APPLE_ZFS",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x52414944,
                 time_mid: 0x0000,
                 time_hi_and_version: 0x11aa,
@@ -344,7 +345,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "APPLE_RAID",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x52414944,
                 time_mid: 0x5f4f,
                 time_hi_and_version: 0x11aa,
@@ -355,7 +356,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "APPLE_RAID_OFFLINE",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x4C616265,
                 time_mid: 0x6c00,
                 time_hi_and_version: 0x11aa,
@@ -366,7 +367,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "APPLE_LABEL",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x5265636f,
                 time_mid: 0x7665,
                 time_hi_and_version: 0x11AA,
@@ -377,7 +378,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "APPLE_TV_RECOVERY",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x53746f72,
                 time_mid: 0x6167,
                 time_hi_and_version: 0x11AA,
@@ -388,7 +389,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "APPLE_CORE_STORAGE",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x7c3457ef,
                 time_mid: 0x0000,
                 time_hi_and_version: 0x11aa,
@@ -399,7 +400,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "APPLE_APFS",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x49f48d5a,
                 time_mid: 0xb10e,
                 time_hi_and_version: 0x11dc,
@@ -410,7 +411,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "NETBSD_FFS",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x49f48d82,
                 time_mid: 0xb10e,
                 time_hi_and_version: 0x11dc,
@@ -421,7 +422,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "NETBSD_LFS",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x49f48d32,
                 time_mid: 0xb10e,
                 time_hi_and_version: 0x11dc,
@@ -432,7 +433,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "NETBSD_SWAP",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x49f48daa,
                 time_mid: 0xb10e,
                 time_hi_and_version: 0x11dc,
@@ -443,7 +444,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "NETBSD_RAID",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x2db519c4,
                 time_mid: 0xb10f,
                 time_hi_and_version: 0x11dc,
@@ -454,7 +455,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "NETBSD_CCD",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x2db519ec,
                 time_mid: 0xb10f,
                 time_hi_and_version: 0x11dc,
@@ -465,7 +466,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "NETBSD_CGD",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x9d087404,
                 time_mid: 0x1ca5,
                 time_hi_and_version: 0x11dc,
@@ -476,7 +477,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "DRAGONFLY_LABEL32",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x9d58fdbd,
                 time_mid: 0x1ca5,
                 time_hi_and_version: 0x11dc,
@@ -487,7 +488,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "DRAGONFLY_SWAP",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x9d94ce7c,
                 time_mid: 0x1ca5,
                 time_hi_and_version: 0x11dc,
@@ -498,7 +499,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "DRAGONFLY_UFS1",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x9dd4478f,
                 time_mid: 0x1ca5,
                 time_hi_and_version: 0x11dc,
@@ -509,7 +510,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "DRAGONFLY_VINUM",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xdbd5211b,
                 time_mid: 0x1ca5,
                 time_hi_and_version: 0x11dc,
@@ -520,7 +521,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "DRAGONFLY_CCD",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x3d48ce54,
                 time_mid: 0x1d16,
                 time_hi_and_version: 0x11dc,
@@ -531,7 +532,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "DRAGONFLY_LABEL64",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xbd215ab2,
                 time_mid: 0x1d16,
                 time_hi_and_version: 0x11dc,
@@ -542,7 +543,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "DRAGONFLY_LEGACY",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x61dc63ac,
                 time_mid: 0x6e38,
                 time_hi_and_version: 0x11dc,
@@ -553,7 +554,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "DRAGONFLY_HAMMER",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x5cbb9ad1,
                 time_mid: 0x862d,
                 time_hi_and_version: 0x11dc,
@@ -564,7 +565,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "DRAGONFLY_HAMMER2",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xcab6e88e,
                 time_mid: 0xabf3,
                 time_hi_and_version: 0x4102,
@@ -575,7 +576,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "CHROMEOS_FIRMWARE",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0xfe3a2a5d,
                 time_mid: 0x4f32,
                 time_hi_and_version: 0x41a7,
@@ -586,7 +587,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "CHROMEOS_KERNEL",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x2e0a753d,
                 time_mid: 0x9e48,
                 time_hi_and_version: 0x43b0,
@@ -597,7 +598,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "CHROMEOS_RESERVED",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x3cb8e202,
                 time_mid: 0x3b7e,
                 time_hi_and_version: 0x47dd,
@@ -608,7 +609,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "CHROMEOS_ROOT",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x824cc7a0,
                 time_mid: 0x36a8,
                 time_hi_and_version: 0x11e3,
@@ -619,7 +620,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "OPENBSD_DATA",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x6a82cb45,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
@@ -630,7 +631,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "SOLARIS_BOOT",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x6a85cf4d,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
@@ -641,7 +642,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "SOLARIS_ROOT",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x6a87c46f,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
@@ -652,7 +653,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "SOLARIS_SWAP",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x6a8b642b,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
@@ -663,7 +664,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "SOLARIS_BACKUP",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x6a8ef2e9,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
@@ -674,7 +675,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "SOLARIS_VAR",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x6a90ba39,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
@@ -685,7 +686,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "SOLARIS_HOME",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x6a9283a5,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
@@ -696,7 +697,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "SOLARIS_ALTSEC",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x6a945a3b,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
@@ -707,7 +708,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
             name: "SOLARIS_RESERVED",
         },
         KnownUuid {
-            uuid: Uuid {
+            uuid: uuid::Uuid {
                 time_low: 0x21686148,
                 time_mid: 0x6449,
                 time_hi_and_version: 0x6e6f,
@@ -720,7 +721,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
     ]
 }
 
-pub fn known_uuid_to_str(uuid: &crate::uuid::Uuid) -> String {
+pub fn known_uuid_to_str(uuid: &uuid::Uuid) -> String {
     assert!(is_le());
 
     for x in get_known_uuid().iter() {
@@ -737,33 +738,36 @@ pub fn is_le() -> bool {
 }
 
 pub fn assert_ds() {
-    assert!(std::mem::size_of::<crate::gpt::GptHdr>() == 92 + 4);
-    assert!(std::mem::size_of::<crate::gpt::GptEnt>() == 128);
-    assert!(std::mem::size_of::<crate::uuid::Uuid>() == 16);
+    assert!(std::mem::size_of::<gpt::GptHdr>() == 92 + 4);
+    assert!(std::mem::size_of::<gpt::GptEnt>() == 128);
+    assert!(std::mem::size_of::<uuid::Uuid>() == 16);
 }
 
-pub fn read_u8(fp: &mut std::fs::File) -> Result<u8, std::io::Error> {
+pub fn read_u8(fp: &mut std::fs::File) -> std::io::Result<u8> {
     fp.read_u8()
 }
 
-pub fn read_le16(fp: &mut std::fs::File) -> Result<u16, std::io::Error> {
+pub fn read_le16(fp: &mut std::fs::File) -> std::io::Result<u16> {
     fp.read_u16::<byteorder::LittleEndian>()
 }
 
-pub fn read_le32(fp: &mut std::fs::File) -> Result<u32, std::io::Error> {
+pub fn read_le32(fp: &mut std::fs::File) -> std::io::Result<u32> {
     fp.read_u32::<byteorder::LittleEndian>()
 }
 
-pub fn read_le64(fp: &mut std::fs::File) -> Result<u64, std::io::Error> {
+pub fn read_le64(fp: &mut std::fs::File) -> std::io::Result<u64> {
     fp.read_u64::<byteorder::LittleEndian>()
 }
 
 #[cfg(test)]
 mod tests {
+    use crate::gpt;
+    use crate::uuid;
+
     #[test]
     fn test_uuid_to_str() {
-        let u = crate::uuid::Uuid {
-            ..crate::uuid::Uuid::default()
+        let u = uuid::Uuid {
+            ..uuid::Uuid::default()
         };
         assert_eq!(
             super::uuid_to_str(&u),
@@ -792,7 +796,7 @@ mod tests {
 
     #[test]
     fn test_known_uuid_to_str() {
-        let u = crate::uuid::Uuid {
+        let u = uuid::Uuid {
             time_low: 0x516e7cb4,
             time_mid: 0x6ecf,
             time_hi_and_version: 0x11d6,
@@ -802,7 +806,7 @@ mod tests {
         };
         assert_eq!(super::known_uuid_to_str(&u), "FREEBSD");
 
-        let u = crate::uuid::Uuid {
+        let u = uuid::Uuid {
             time_low: 0x416e7cb4,
             time_mid: 0x6ecf,
             time_hi_and_version: 0x11d6,
@@ -815,8 +819,8 @@ mod tests {
 
     #[test]
     fn test_ds() {
-        assert_eq!(std::mem::size_of::<crate::gpt::GptHdr>(), 92 + 4);
-        assert_eq!(std::mem::size_of::<crate::gpt::GptEnt>(), 128);
-        assert_eq!(std::mem::size_of::<crate::uuid::Uuid>(), 16);
+        assert_eq!(std::mem::size_of::<gpt::GptHdr>(), 92 + 4);
+        assert_eq!(std::mem::size_of::<gpt::GptEnt>(), 128);
+        assert_eq!(std::mem::size_of::<uuid::Uuid>(), 16);
     }
 }

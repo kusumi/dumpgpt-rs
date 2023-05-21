@@ -1,12 +1,12 @@
 bin:
-	cargo build
+	cargo build --release
 fmt:
 	cargo fmt
 	git status
 clean:
 	cargo clean
 test:
-	cargo test
+	cargo test --release
 lint:
-	cargo clippy --fix
+	cargo clippy --release --fix
 	git status

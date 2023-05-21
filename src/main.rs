@@ -2,7 +2,7 @@ mod gpt;
 mod subr;
 mod uuid;
 
-const VERSION: [i32; 3] = [0, 1, 1];
+const VERSION: [i32; 3] = [0, 1, 2];
 
 #[derive(Debug, Default)]
 struct UserOption {
@@ -47,10 +47,7 @@ fn main() {
     opts.optflag("v", "version", "Print version and exit");
     opts.optflag("h", "help", "Print usage and exit");
 
-    let matches = match opts.parse(&args[1..]) {
-        Ok(v) => v,
-        Err(e) => panic!("{}", e),
-    };
+    let matches = opts.parse(&args[1..]).unwrap();
     if matches.opt_present("v") {
         print_version();
         std::process::exit(1);
@@ -81,13 +78,6 @@ fn main() {
     println!("{}", device);
     println!();
 
-    let mut fp = match std::fs::File::open(device) {
-        Ok(v) => v,
-        Err(e) => panic!("{}", e),
-    };
-
-    match gpt::dump_gpt(&mut fp, &dat) {
-        Ok(_) => (),
-        Err(e) => panic!("{}", e),
-    }
+    let mut fp = std::fs::File::open(device).unwrap();
+    gpt::dump_gpt(&mut fp, &dat).unwrap();
 }

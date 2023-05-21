@@ -1,4 +1,4 @@
-dumpgpt-rs ([v0.1.1](https://github.com/kusumi/dumpgpt-rs/releases/tag/v0.1.1))
+dumpgpt-rs ([v0.1.2](https://github.com/kusumi/dumpgpt-rs/releases/tag/v0.1.2))
 ========
 
 ## About
@@ -21,8 +21,8 @@ or
 
 ## Usage
 
-    $ ./target/debug/dumpgpt-rs
-    usage: ./target/debug/dumpgpt-rs [<options>] <paths>
+    $ ./target/release/dumpgpt-rs
+    usage: ./target/release/dumpgpt-rs [<options>] <paths>
     
     Options:
             --verbose       Enable verbose print
