@@ -1,9 +1,9 @@
-use crate::subr;
+use serde::Deserialize;
 
 pub const UUID_NODE_LEN: usize = 6;
 
 #[repr(C)] // should be packed
-#[derive(PartialEq, Debug, Default)]
+#[derive(PartialEq, Debug, Default, Deserialize)]
 pub struct Uuid {
     pub time_low: u32,
     pub time_mid: u16,
@@ -11,23 +11,6 @@ pub struct Uuid {
     pub clock_seq_hi_and_reserved: u8,
     pub clock_seq_low: u8,
     pub node: [u8; UUID_NODE_LEN],
-}
-
-pub fn read_uuid_le(fp: &mut std::fs::File) -> std::io::Result<Uuid> {
-    let mut uuid = Uuid {
-        ..Default::default()
-    };
-
-    uuid.time_low = subr::read_le32(fp)?;
-    uuid.time_mid = subr::read_le16(fp)?;
-    uuid.time_hi_and_version = subr::read_le16(fp)?;
-    uuid.clock_seq_hi_and_reserved = subr::read_u8(fp)?;
-    uuid.clock_seq_low = subr::read_u8(fp)?;
-    for i in 0..UUID_NODE_LEN {
-        uuid.node[i] = subr::read_u8(fp)?;
-    }
-
-    Ok(uuid)
 }
 
 pub fn uuid_to_string(u: &Uuid) -> String {

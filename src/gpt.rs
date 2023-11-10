@@ -1,12 +1,15 @@
 use crate::subr;
 use crate::uuid;
+use crate::Result;
 use crate::UserData;
+use serde::Deserialize;
+use std::io::Read;
 use std::io::Seek;
 
 const UNIT_SIZE: usize = 512;
 
 #[repr(C)] // should be packed
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Deserialize)]
 pub struct GptHdr {
     pub hdr_sig: [u8; 8],
     pub hdr_revision: u32,
@@ -26,7 +29,7 @@ pub struct GptHdr {
 }
 
 #[repr(C)] // should be packed
-#[derive(PartialEq, Debug, Default)]
+#[derive(PartialEq, Debug, Default, Deserialize)]
 pub struct GptEnt {
     pub ent_type: uuid::Uuid,
     pub ent_uuid: uuid::Uuid,
@@ -34,48 +37,32 @@ pub struct GptEnt {
     pub ent_lba_end: u64,
     pub ent_attr: u64,
 
-    // XXX "error[E0277]: the trait bound `[u16; 36]: Default` is not satisfied" why ?
-    //pub ent_name: [u16; 36],
-    pub ent_name1: [u16; 18],
-    pub ent_name2: [u16; 18],
+    // XXX Arrays of sizes from 0 to 32 (inclusive) implement the Default trait.
+    pub ent_name1: [u16; 32],
+    pub ent_name2: [u16; 4],
 }
 
 fn try_known_uuid_to_str(uuid: &uuid::Uuid, dat: &UserData) -> String {
     if dat.opt.symbol {
         let s = subr::known_uuid_to_str(uuid);
         if !s.is_empty() {
-            return s;
+            return s.to_string();
         }
     }
 
     subr::uuid_to_str(uuid)
 }
 
-fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, dat: &UserData) -> std::io::Result<GptHdr> {
+fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, dat: &UserData) -> Result<GptHdr> {
     let hdr_offset = hdr_lba * UNIT_SIZE as u64;
     fp.seek(std::io::SeekFrom::Start(hdr_offset))?;
 
-    let mut hdr = GptHdr {
-        ..Default::default()
-    };
-    // why can't Rust easily read(2) + handle blob ?
-    for i in 0..8 {
-        hdr.hdr_sig[i] = subr::read_u8(fp)?;
-    }
-    hdr.hdr_revision = subr::read_le32(fp)?;
-    hdr.hdr_size = subr::read_le32(fp)?;
-    hdr.hdr_crc_self = subr::read_le32(fp)?;
-    hdr.reserved = subr::read_le32(fp)?;
-    hdr.hdr_lba_self = subr::read_le64(fp)?;
-    hdr.hdr_lba_alt = subr::read_le64(fp)?;
-    hdr.hdr_lba_start = subr::read_le64(fp)?;
-    hdr.hdr_lba_end = subr::read_le64(fp)?;
-    hdr.hdr_uuid = uuid::read_uuid_le(fp)?;
-    hdr.hdr_lba_table = subr::read_le64(fp)?;
-    hdr.hdr_entries = subr::read_le32(fp)?;
-    hdr.hdr_entsz = subr::read_le32(fp)?;
-    hdr.hdr_crc_table = subr::read_le32(fp)?;
-    hdr.padding = subr::read_le32(fp)?;
+    let mut buf = vec![0; std::mem::size_of::<GptHdr>()];
+    fp.read_exact(&mut buf)?;
+
+    // XXX Explicitly set little endian.
+    // https://users.rust-lang.org/t/change-endianness-in-bincode-serde/23063
+    let hdr: GptHdr = bincode::deserialize(&buf)?;
 
     println!(
         "sig      = \"{}{}{}{}{}{}{}{}\"",
@@ -111,13 +98,15 @@ fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, dat: &UserData) -> std::io:
 
     // XXX
     if hdr.hdr_entries > 512 {
-        return Err(std::io::Error::from(std::io::ErrorKind::InvalidData));
+        return Err(Box::new(std::io::Error::from(
+            std::io::ErrorKind::InvalidData,
+        )));
     }
 
     Ok(hdr)
 }
 
-fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, dat: &UserData) -> std::io::Result<()> {
+fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, dat: &UserData) -> Result<()> {
     let lba_table_size = hdr.hdr_entsz * hdr.hdr_entries;
     let lba_table_sectors = lba_table_size / UNIT_SIZE as u32;
     let mut total = 0;
@@ -135,21 +124,12 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, dat: &UserData) -> std::io
         for j in 0..sector_entries {
             fp.seek(std::io::SeekFrom::Start(offset + entry_offset))?;
 
-            let mut p = GptEnt {
-                ..Default::default()
-            };
-            // why can't Rust easily read(2) + handle blob ?
-            p.ent_type = uuid::read_uuid_le(fp)?;
-            p.ent_uuid = uuid::read_uuid_le(fp)?;
-            p.ent_lba_start = subr::read_le64(fp)?;
-            p.ent_lba_end = subr::read_le64(fp)?;
-            p.ent_attr = subr::read_le64(fp)?;
-            for k in 0..p.ent_name1.len() {
-                p.ent_name1[k] = subr::read_le16(fp)?;
-            }
-            for k in 0..p.ent_name2.len() {
-                p.ent_name2[k] = subr::read_le16(fp)?;
-            }
+            let mut buf = vec![0; std::mem::size_of::<GptEnt>()];
+            fp.read_exact(&mut buf)?;
+
+            // XXX Explicitly set little endian.
+            // https://users.rust-lang.org/t/change-endianness-in-bincode-serde/23063
+            let p: GptEnt = bincode::deserialize(&buf)?;
 
             entry_offset += std::mem::size_of::<GptEnt>() as u64;
             let empty = GptEnt {
@@ -163,14 +143,15 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, dat: &UserData) -> std::io
             let mut name = [0u8; 36];
             let mut nlen = 0;
             assert!(name.len() == 36);
-            for k in 0..name.len() {
+            assert!(p.ent_name1.len() + p.ent_name2.len() == name.len());
+            for (k, v) in name.iter_mut().enumerate() {
                 // XXX ascii
-                name[k] = if k < name.len() / 2 {
+                *v = if k < p.ent_name1.len() {
                     p.ent_name1[k] & 0xFF
                 } else {
-                    p.ent_name2[k - name.len() / 2] & 0xFF
+                    p.ent_name2[k - p.ent_name1.len()] & 0xFF
                 } as u8;
-                if name[k] == 0 {
+                if *v == 0 {
                     nlen = k;
                     break;
                 }
@@ -184,7 +165,7 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, dat: &UserData) -> std::io
                 p.ent_lba_start,
                 p.ent_lba_end,
                 p.ent_attr,
-                std::str::from_utf8(&name[..nlen]).unwrap()
+                std::str::from_utf8(&name[..nlen])?
             );
             total += 1;
         }
@@ -194,7 +175,7 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, dat: &UserData) -> std::io
     Ok(())
 }
 
-pub fn dump_gpt(fp: &mut std::fs::File, dat: &UserData) -> std::io::Result<()> {
+pub fn dump_gpt(fp: &mut std::fs::File, dat: &UserData) -> Result<()> {
     let mut hdr2 = GptHdr {
         ..Default::default()
     };

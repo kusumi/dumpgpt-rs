@@ -1,6 +1,5 @@
 use crate::gpt;
 use crate::uuid;
-use byteorder::ReadBytesExt;
 
 pub fn uuid_to_str(uuid: &uuid::Uuid) -> String {
     uuid::uuid_to_string(uuid)
@@ -721,16 +720,16 @@ fn get_known_uuid() -> [KnownUuid; 64] {
     ]
 }
 
-pub fn known_uuid_to_str(uuid: &uuid::Uuid) -> String {
+pub fn known_uuid_to_str(uuid: &uuid::Uuid) -> &'static str {
     assert!(is_le());
 
     for x in get_known_uuid().iter() {
         if *uuid == x.uuid {
             assert!(x.name.len() <= 36);
-            return String::from(x.name);
+            return x.name;
         }
     }
-    String::from("")
+    ""
 }
 
 pub fn is_le() -> bool {
@@ -741,22 +740,6 @@ pub fn assert_ds() {
     assert!(std::mem::size_of::<gpt::GptHdr>() == 92 + 4);
     assert!(std::mem::size_of::<gpt::GptEnt>() == 128);
     assert!(std::mem::size_of::<uuid::Uuid>() == 16);
-}
-
-pub fn read_u8(fp: &mut std::fs::File) -> std::io::Result<u8> {
-    fp.read_u8()
-}
-
-pub fn read_le16(fp: &mut std::fs::File) -> std::io::Result<u16> {
-    fp.read_u16::<byteorder::LittleEndian>()
-}
-
-pub fn read_le32(fp: &mut std::fs::File) -> std::io::Result<u32> {
-    fp.read_u32::<byteorder::LittleEndian>()
-}
-
-pub fn read_le64(fp: &mut std::fs::File) -> std::io::Result<u64> {
-    fp.read_u64::<byteorder::LittleEndian>()
 }
 
 #[cfg(test)]
