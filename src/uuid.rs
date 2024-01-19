@@ -2,7 +2,7 @@ use serde::Deserialize;
 
 pub const UUID_NODE_LEN: usize = 6;
 
-#[repr(C)] // should be packed
+#[repr(C)]
 #[derive(PartialEq, Debug, Default, Deserialize)]
 pub struct Uuid {
     pub time_low: u32,

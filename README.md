@@ -1,4 +1,4 @@
-dumpgpt-rs ([v0.1.3](https://github.com/kusumi/dumpgpt-rs/releases/tag/v0.1.3))
+dumpgpt-rs ([v0.1.4](https://github.com/kusumi/dumpgpt-rs/releases/tag/v0.1.4))
 ========
 
 ## About

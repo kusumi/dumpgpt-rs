@@ -10,3 +10,5 @@ test:
 lint:
 	cargo clippy --release --fix
 	git status
+
+xxx:	fmt lint test

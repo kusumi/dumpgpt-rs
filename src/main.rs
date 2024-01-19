@@ -2,20 +2,15 @@ mod gpt;
 mod subr;
 mod uuid;
 
-const VERSION: [i32; 3] = [0, 1, 3];
+const VERSION: [i32; 3] = [0, 1, 4];
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
 #[derive(Debug, Default)]
-struct UserOption {
+struct Opt {
     verbose: bool,
     symbol: bool,
     noalt: bool,
-}
-
-#[derive(Debug, Default)]
-pub struct UserData {
-    opt: UserOption,
 }
 
 fn get_version_string() -> String {
@@ -61,14 +56,14 @@ fn main() {
         std::process::exit(1);
     }
 
-    let mut dat = UserData {
+    let mut opt = Opt {
         ..Default::default()
     };
-    dat.opt.verbose = matches.opt_present("verbose");
-    dat.opt.symbol = matches.opt_present("symbol");
-    dat.opt.noalt = matches.opt_present("noalt");
+    opt.verbose = matches.opt_present("verbose");
+    opt.symbol = matches.opt_present("symbol");
+    opt.noalt = matches.opt_present("noalt");
 
-    if dat.opt.verbose {
+    if opt.verbose {
         print_version();
     }
 
@@ -81,5 +76,7 @@ fn main() {
     println!("{}", device);
     println!();
 
-    gpt::dump_gpt(&mut std::fs::File::open(device).unwrap(), &dat).unwrap();
+    if let Err(e) = gpt::dump_gpt(&mut std::fs::File::open(device).unwrap(), &opt) {
+        panic!("{}", e);
+    }
 }

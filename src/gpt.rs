@@ -1,14 +1,14 @@
 use crate::subr;
 use crate::uuid;
+use crate::Opt;
 use crate::Result;
-use crate::UserData;
 use serde::Deserialize;
 use std::io::Read;
 use std::io::Seek;
 
 const UNIT_SIZE: usize = 512;
 
-#[repr(C)] // should be packed
+#[repr(C)]
 #[derive(Debug, Default, Deserialize)]
 pub struct GptHdr {
     pub hdr_sig: [u8; 8],
@@ -28,7 +28,7 @@ pub struct GptHdr {
     pub padding: u32,
 }
 
-#[repr(C)] // should be packed
+#[repr(C)]
 #[derive(PartialEq, Debug, Default, Deserialize)]
 pub struct GptEnt {
     pub ent_type: uuid::Uuid,
@@ -42,18 +42,17 @@ pub struct GptEnt {
     pub ent_name2: [u16; 4],
 }
 
-fn try_known_uuid_to_str(uuid: &uuid::Uuid, dat: &UserData) -> String {
-    if dat.opt.symbol {
+fn try_known_uuid_to_str(uuid: &uuid::Uuid, opt: &Opt) -> String {
+    if opt.symbol {
         let s = subr::known_uuid_to_str(uuid);
         if !s.is_empty() {
             return s.to_string();
         }
     }
-
     subr::uuid_to_str(uuid)
 }
 
-fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, dat: &UserData) -> Result<GptHdr> {
+fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, opt: &Opt) -> Result<GptHdr> {
     let hdr_offset = hdr_lba * UNIT_SIZE as u64;
     fp.seek(std::io::SeekFrom::Start(hdr_offset))?;
 
@@ -89,7 +88,7 @@ fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, dat: &UserData) -> Result<G
     println!("lba_start= 0x{:016x}", hdr.hdr_lba_start);
     println!("lba_end  = 0x{:016x}", hdr.hdr_lba_end);
 
-    println!("uuid     = {}", try_known_uuid_to_str(&hdr.hdr_uuid, dat));
+    println!("uuid     = {}", try_known_uuid_to_str(&hdr.hdr_uuid, opt));
 
     println!("lba_table= 0x{:016x}", hdr.hdr_lba_table);
     println!("entries  = {}", hdr.hdr_entries);
@@ -102,11 +101,10 @@ fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, dat: &UserData) -> Result<G
             std::io::ErrorKind::InvalidData,
         )));
     }
-
     Ok(hdr)
 }
 
-fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, dat: &UserData) -> Result<()> {
+fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, opt: &Opt) -> Result<()> {
     let lba_table_size = hdr.hdr_entsz * hdr.hdr_entries;
     let lba_table_sectors = lba_table_size / UNIT_SIZE as u32;
     let mut total = 0;
@@ -135,7 +133,7 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, dat: &UserData) -> Result<
             let empty = GptEnt {
                 ..Default::default()
             };
-            if !dat.opt.verbose && p == empty {
+            if !opt.verbose && p == empty {
                 total += 1;
                 continue;
             }
@@ -160,8 +158,8 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, dat: &UserData) -> Result<
             println!(
                 "{:<3} {:<36} {:<36} {:<016x} {:<016x} {:<016x} {}",
                 i * sector_entries + j,
-                try_known_uuid_to_str(&p.ent_type, dat),
-                try_known_uuid_to_str(&p.ent_uuid, dat),
+                try_known_uuid_to_str(&p.ent_type, opt),
+                try_known_uuid_to_str(&p.ent_uuid, opt),
                 p.ent_lba_start,
                 p.ent_lba_end,
                 p.ent_attr,
@@ -171,37 +169,35 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, dat: &UserData) -> Result<
         }
     }
     assert!(total == hdr.hdr_entries);
-
     Ok(())
 }
 
-pub fn dump_gpt(fp: &mut std::fs::File, dat: &UserData) -> Result<()> {
+pub fn dump_gpt(fp: &mut std::fs::File, opt: &Opt) -> Result<()> {
     let mut hdr2 = GptHdr {
         ..Default::default()
     };
 
     // primary header
     println!("primary header");
-    let hdr1: GptHdr = dump_header(fp, 1, dat)?;
+    let hdr1: GptHdr = dump_header(fp, 1, opt)?;
 
     // secondary header
-    if !dat.opt.noalt {
+    if !opt.noalt {
         println!();
         println!("secondary header");
-        hdr2 = dump_header(fp, hdr1.hdr_lba_alt, dat)?;
+        hdr2 = dump_header(fp, hdr1.hdr_lba_alt, opt)?;
     }
 
     // primary entries
     println!();
     println!("primary entries");
-    dump_entries(fp, &hdr1, dat)?;
+    dump_entries(fp, &hdr1, opt)?;
 
     // secondary entries
-    if !dat.opt.noalt {
+    if !opt.noalt {
         println!();
         println!("secondary entries");
-        dump_entries(fp, &hdr2, dat)?;
+        dump_entries(fp, &hdr2, opt)?;
     }
-
     Ok(())
 }
