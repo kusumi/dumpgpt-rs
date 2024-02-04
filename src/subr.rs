@@ -1,7 +1,7 @@
 use crate::gpt;
 use crate::uuid;
 
-pub fn uuid_to_str(uuid: &uuid::Uuid) -> String {
+pub(crate) fn uuid_to_str(uuid: &uuid::Uuid) -> String {
     uuid::uuid_to_string(uuid)
 }
 
@@ -720,7 +720,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
     ]
 }
 
-pub fn known_uuid_to_str(uuid: &uuid::Uuid) -> &'static str {
+pub(crate) fn known_uuid_to_str(uuid: &uuid::Uuid) -> &'static str {
     assert!(is_le());
 
     for x in get_known_uuid().iter() {
@@ -732,11 +732,11 @@ pub fn known_uuid_to_str(uuid: &uuid::Uuid) -> &'static str {
     ""
 }
 
-pub fn is_le() -> bool {
+pub(crate) fn is_le() -> bool {
     cfg!(target_endian = "little")
 }
 
-pub fn assert_ds() {
+pub(crate) fn assert_ds() {
     assert!(std::mem::size_of::<gpt::GptHdr>() == 92 + 4);
     assert!(std::mem::size_of::<gpt::GptEnt>() == 128);
     assert!(std::mem::size_of::<uuid::Uuid>() == 16);

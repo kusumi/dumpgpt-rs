@@ -1,19 +1,19 @@
 use serde::Deserialize;
 
-pub const UUID_NODE_LEN: usize = 6;
+pub(crate) const UUID_NODE_LEN: usize = 6;
 
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Deserialize)]
-pub struct Uuid {
-    pub time_low: u32,
-    pub time_mid: u16,
-    pub time_hi_and_version: u16,
-    pub clock_seq_hi_and_reserved: u8,
-    pub clock_seq_low: u8,
-    pub node: [u8; UUID_NODE_LEN],
+pub(crate) struct Uuid {
+    pub(crate) time_low: u32,
+    pub(crate) time_mid: u16,
+    pub(crate) time_hi_and_version: u16,
+    pub(crate) clock_seq_hi_and_reserved: u8,
+    pub(crate) clock_seq_low: u8,
+    pub(crate) node: [u8; UUID_NODE_LEN],
 }
 
-pub fn uuid_to_string(u: &Uuid) -> String {
+pub(crate) fn uuid_to_string(u: &Uuid) -> String {
     format!(
         "{:08x}-{:04x}-{:04x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
         u.time_low,

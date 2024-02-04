@@ -10,36 +10,36 @@ const UNIT_SIZE: usize = 512;
 
 #[repr(C)]
 #[derive(Debug, Default, Deserialize)]
-pub struct GptHdr {
-    pub hdr_sig: [u8; 8],
-    pub hdr_revision: u32,
-    pub hdr_size: u32,
-    pub hdr_crc_self: u32,
-    pub reserved: u32,
-    pub hdr_lba_self: u64,
-    pub hdr_lba_alt: u64,
-    pub hdr_lba_start: u64,
-    pub hdr_lba_end: u64,
-    pub hdr_uuid: uuid::Uuid,
-    pub hdr_lba_table: u64,
-    pub hdr_entries: u32,
-    pub hdr_entsz: u32,
-    pub hdr_crc_table: u32,
-    pub padding: u32,
+pub(crate) struct GptHdr {
+    pub(crate) hdr_sig: [u8; 8],
+    pub(crate) hdr_revision: u32,
+    pub(crate) hdr_size: u32,
+    pub(crate) hdr_crc_self: u32,
+    pub(crate) reserved: u32,
+    pub(crate) hdr_lba_self: u64,
+    pub(crate) hdr_lba_alt: u64,
+    pub(crate) hdr_lba_start: u64,
+    pub(crate) hdr_lba_end: u64,
+    pub(crate) hdr_uuid: uuid::Uuid,
+    pub(crate) hdr_lba_table: u64,
+    pub(crate) hdr_entries: u32,
+    pub(crate) hdr_entsz: u32,
+    pub(crate) hdr_crc_table: u32,
+    pub(crate) padding: u32,
 }
 
 #[repr(C)]
 #[derive(PartialEq, Debug, Default, Deserialize)]
-pub struct GptEnt {
-    pub ent_type: uuid::Uuid,
-    pub ent_uuid: uuid::Uuid,
-    pub ent_lba_start: u64,
-    pub ent_lba_end: u64,
-    pub ent_attr: u64,
+pub(crate) struct GptEnt {
+    pub(crate) ent_type: uuid::Uuid,
+    pub(crate) ent_uuid: uuid::Uuid,
+    pub(crate) ent_lba_start: u64,
+    pub(crate) ent_lba_end: u64,
+    pub(crate) ent_attr: u64,
 
     // XXX Arrays of sizes from 0 to 32 (inclusive) implement the Default trait.
-    pub ent_name1: [u16; 32],
-    pub ent_name2: [u16; 4],
+    pub(crate) ent_name1: [u16; 32],
+    pub(crate) ent_name2: [u16; 4],
 }
 
 fn try_known_uuid_to_str(uuid: &uuid::Uuid, opt: &Opt) -> String {
@@ -172,7 +172,7 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, opt: &Opt) -> Result<()> {
     Ok(())
 }
 
-pub fn dump_gpt(fp: &mut std::fs::File, opt: &Opt) -> Result<()> {
+pub(crate) fn dump_gpt(fp: &mut std::fs::File, opt: &Opt) -> Result<()> {
     let mut hdr2 = GptHdr {
         ..Default::default()
     };

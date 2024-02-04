@@ -1,4 +1,4 @@
-dumpgpt-rs ([v0.1.4](https://github.com/kusumi/dumpgpt-rs/releases/tag/v0.1.4))
+dumpgpt-rs ([v0.1.5](https://github.com/kusumi/dumpgpt-rs/releases/tag/v0.1.5))
 ========
 
 ## About
@@ -15,10 +15,6 @@ Recent version of Rust
 
     $ make
 
-or
-
-    $ gmake
-
 ## Usage
 
     $ ./target/release/dumpgpt-rs
@@ -30,7 +26,3 @@ or
             --noalt         Do not dump secondary header and entries
         -v, --version       Print version and exit
         -h, --help          Print usage and exit
-
-## Resource
-
-[https://github.com/kusumi/dumpgpt-rs](https://github.com/kusumi/dumpgpt-rs)
