@@ -1,9 +1,7 @@
-use serde::Deserialize;
-
 pub(crate) const UUID_NODE_LEN: usize = 6;
 
 #[repr(C)]
-#[derive(PartialEq, Debug, Default, Deserialize)]
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub(crate) struct Uuid {
     pub(crate) time_low: u32,
     pub(crate) time_mid: u16,
@@ -11,6 +9,14 @@ pub(crate) struct Uuid {
     pub(crate) clock_seq_hi_and_reserved: u8,
     pub(crate) clock_seq_low: u8,
     pub(crate) node: [u8; UUID_NODE_LEN],
+}
+
+impl Uuid {
+    pub(crate) fn new() -> Self {
+        Self {
+            ..Default::default()
+        }
+    }
 }
 
 pub(crate) fn uuid_to_string(u: &Uuid) -> String {
@@ -34,9 +40,7 @@ pub(crate) fn uuid_to_string(u: &Uuid) -> String {
 mod tests {
     #[test]
     fn test_uuid_to_string() {
-        let u = super::Uuid {
-            ..super::Uuid::default()
-        };
+        let u = super::Uuid::new();
         assert_eq!(
             super::uuid_to_string(&u),
             "00000000-0000-0000-0000-000000000000"

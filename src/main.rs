@@ -2,7 +2,7 @@ mod gpt;
 mod subr;
 mod uuid;
 
-const VERSION: [i32; 3] = [0, 1, 5];
+const VERSION: [i32; 3] = [0, 1, 6];
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 

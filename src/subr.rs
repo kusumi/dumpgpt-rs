@@ -5,7 +5,7 @@ pub(crate) fn uuid_to_str(uuid: &uuid::Uuid) -> String {
     uuid::uuid_to_string(uuid)
 }
 
-#[derive(PartialEq, Debug, Default)]
+#[derive(Debug, Default)]
 struct KnownUuid {
     uuid: uuid::Uuid,
     name: &'static str,
@@ -749,9 +749,7 @@ mod tests {
 
     #[test]
     fn test_uuid_to_str() {
-        let u = uuid::Uuid {
-            ..uuid::Uuid::default()
-        };
+        let u = uuid::Uuid::new();
         assert_eq!(
             super::uuid_to_str(&u),
             "00000000-0000-0000-0000-000000000000"

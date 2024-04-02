@@ -2,14 +2,13 @@ use crate::subr;
 use crate::uuid;
 use crate::Opt;
 use crate::Result;
-use serde::Deserialize;
 use std::io::Read;
 use std::io::Seek;
 
 const UNIT_SIZE: usize = 512;
 
 #[repr(C)]
-#[derive(Debug, Default, Deserialize)]
+#[derive(Clone, Copy, Debug, Default)]
 pub(crate) struct GptHdr {
     pub(crate) hdr_sig: [u8; 8],
     pub(crate) hdr_revision: u32,
@@ -28,18 +27,44 @@ pub(crate) struct GptHdr {
     pub(crate) padding: u32,
 }
 
+impl GptHdr {
+    pub(crate) fn new() -> Self {
+        Self {
+            ..Default::default()
+        }
+    }
+}
+
 #[repr(C)]
-#[derive(PartialEq, Debug, Default, Deserialize)]
+#[derive(Debug, PartialEq)]
 pub(crate) struct GptEnt {
     pub(crate) ent_type: uuid::Uuid,
     pub(crate) ent_uuid: uuid::Uuid,
     pub(crate) ent_lba_start: u64,
     pub(crate) ent_lba_end: u64,
     pub(crate) ent_attr: u64,
+    pub(crate) ent_name: [u16; 36],
+}
 
-    // XXX Arrays of sizes from 0 to 32 (inclusive) implement the Default trait.
-    pub(crate) ent_name1: [u16; 32],
-    pub(crate) ent_name2: [u16; 4],
+impl Default for GptEnt {
+    fn default() -> Self {
+        Self {
+            ent_type: uuid::Uuid::new(),
+            ent_uuid: uuid::Uuid::new(),
+            ent_lba_start: 0,
+            ent_lba_end: 0,
+            ent_attr: 0,
+            ent_name: [0; 36],
+        }
+    }
+}
+
+impl GptEnt {
+    pub(crate) fn new() -> Self {
+        Self {
+            ..Default::default()
+        }
+    }
 }
 
 fn try_known_uuid_to_str(uuid: &uuid::Uuid, opt: &Opt) -> String {
@@ -52,27 +77,37 @@ fn try_known_uuid_to_str(uuid: &uuid::Uuid, opt: &Opt) -> String {
     subr::uuid_to_str(uuid)
 }
 
-fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, opt: &Opt) -> Result<GptHdr> {
-    let hdr_offset = hdr_lba * UNIT_SIZE as u64;
-    fp.seek(std::io::SeekFrom::Start(hdr_offset))?;
+fn alloc_buffer() -> Vec<u8> {
+    let buf = vec![0; UNIT_SIZE];
+    assert!(buf.len() == UNIT_SIZE);
+    assert!(buf.len() % 512 == 0);
+    buf
+}
 
-    let mut buf = vec![0; std::mem::size_of::<GptHdr>()];
+fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, opt: &Opt) -> Result<GptHdr> {
+    let mut buf = alloc_buffer();
+    let hdr_offset = hdr_lba * u64::try_from(buf.len()).unwrap();
+    fp.seek(std::io::SeekFrom::Start(hdr_offset))?;
     fp.read_exact(&mut buf)?;
 
-    // XXX Explicitly set little endian.
-    // https://users.rust-lang.org/t/change-endianness-in-bincode-serde/23063
-    let hdr: GptHdr = bincode::deserialize(&buf)?;
+    let ret = unsafe { buf.align_to::<GptHdr>() };
+    assert!(ret.0.is_empty());
+    let hdr = ret.1[0];
 
+    let mut hdr_sig = [' '; 8];
+    for i in 0..hdr.hdr_sig.len() {
+        hdr_sig[i] = hdr.hdr_sig[i].into();
+    }
     println!(
         "sig      = \"{}{}{}{}{}{}{}{}\"",
-        hdr.hdr_sig[0] as char,
-        hdr.hdr_sig[1] as char,
-        hdr.hdr_sig[2] as char,
-        hdr.hdr_sig[3] as char,
-        hdr.hdr_sig[4] as char,
-        hdr.hdr_sig[5] as char,
-        hdr.hdr_sig[6] as char,
-        hdr.hdr_sig[7] as char,
+        hdr_sig[0],
+        hdr_sig[1],
+        hdr_sig[2],
+        hdr_sig[3],
+        hdr_sig[4],
+        hdr_sig[5],
+        hdr_sig[6],
+        hdr_sig[7],
     );
 
     let p = hdr.hdr_revision.to_le_bytes();
@@ -105,8 +140,9 @@ fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, opt: &Opt) -> Result<GptHdr
 }
 
 fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, opt: &Opt) -> Result<()> {
-    let lba_table_size = hdr.hdr_entsz * hdr.hdr_entries;
-    let lba_table_sectors = lba_table_size / UNIT_SIZE as u32;
+    let lba_table_size =
+        usize::try_from(hdr.hdr_entsz).unwrap() * usize::try_from(hdr.hdr_entries).unwrap();
+    let lba_table_sectors = lba_table_size / UNIT_SIZE;
     let mut total = 0;
 
     println!(
@@ -115,40 +151,30 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, opt: &Opt) -> Result<()> {
     );
 
     for i in 0..lba_table_sectors {
-        let offset = (hdr.hdr_lba_table + i as u64) * UNIT_SIZE as u64;
-        let sector_entries = UNIT_SIZE as u32 / hdr.hdr_entsz;
-        let mut entry_offset = 0;
+        let mut buf = alloc_buffer();
+        let offset =
+            (hdr.hdr_lba_table + u64::try_from(i).unwrap()) * u64::try_from(buf.len()).unwrap();
+        fp.seek(std::io::SeekFrom::Start(offset))?;
+        fp.read_exact(&mut buf)?;
+
+        let sector_entries = buf.len() / usize::try_from(hdr.hdr_entsz).unwrap();
 
         for j in 0..sector_entries {
-            fp.seek(std::io::SeekFrom::Start(offset + entry_offset))?;
+            let p = &buf[std::mem::size_of::<GptEnt>() * j..];
+            let ret = unsafe { p.align_to::<GptEnt>() };
+            assert!(ret.0.is_empty());
+            let p = &ret.1[0];
 
-            let mut buf = vec![0; std::mem::size_of::<GptEnt>()];
-            fp.read_exact(&mut buf)?;
-
-            // XXX Explicitly set little endian.
-            // https://users.rust-lang.org/t/change-endianness-in-bincode-serde/23063
-            let p: GptEnt = bincode::deserialize(&buf)?;
-
-            entry_offset += std::mem::size_of::<GptEnt>() as u64;
-            let empty = GptEnt {
-                ..Default::default()
-            };
-            if !opt.verbose && p == empty {
+            if !opt.verbose && *p == GptEnt::new() {
                 total += 1;
                 continue;
             }
 
             let mut name = [0u8; 36];
             let mut nlen = 0;
-            assert!(name.len() == 36);
-            assert!(p.ent_name1.len() + p.ent_name2.len() == name.len());
+            assert!(p.ent_name.len() == name.len());
             for (k, v) in name.iter_mut().enumerate() {
-                // XXX ascii
-                *v = if k < p.ent_name1.len() {
-                    p.ent_name1[k] & 0xFF
-                } else {
-                    p.ent_name2[k - p.ent_name1.len()] & 0xFF
-                } as u8;
+                *v = (p.ent_name[k] & 0xFF).try_into().unwrap(); // XXX ascii
                 if *v == 0 {
                     nlen = k;
                     break;
@@ -173,13 +199,11 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, opt: &Opt) -> Result<()> {
 }
 
 pub(crate) fn dump_gpt(fp: &mut std::fs::File, opt: &Opt) -> Result<()> {
-    let mut hdr2 = GptHdr {
-        ..Default::default()
-    };
+    let mut hdr2 = GptHdr::new();
 
     // primary header
     println!("primary header");
-    let hdr1: GptHdr = dump_header(fp, 1, opt)?;
+    let hdr1 = dump_header(fp, 1, opt)?;
 
     // secondary header
     if !opt.noalt {
