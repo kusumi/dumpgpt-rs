@@ -15,7 +15,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
     [
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x00000000,
+                time_low: 0x0000_0000,
                 time_mid: 0x0000,
                 time_hi_and_version: 0x0000,
                 clock_seq_hi_and_reserved: 0x00,
@@ -26,7 +26,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xc12a7328,
+                time_low: 0xc12a_7328,
                 time_mid: 0xf81f,
                 time_hi_and_version: 0x11d2,
                 clock_seq_hi_and_reserved: 0xba,
@@ -37,7 +37,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x024dee41,
+                time_low: 0x024d_ee41,
                 time_mid: 0x33e7,
                 time_hi_and_version: 0x11d3,
                 clock_seq_hi_and_reserved: 0x9d,
@@ -48,7 +48,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x516e7cb4,
+                time_low: 0x516e_7cb4,
                 time_mid: 0x6ecf,
                 time_hi_and_version: 0x11d6,
                 clock_seq_hi_and_reserved: 0x8f,
@@ -59,7 +59,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x83bd6b9d,
+                time_low: 0x83bd_6b9d,
                 time_mid: 0x7f41,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0xbe,
@@ -70,7 +70,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x74ba7dd9,
+                time_low: 0x74ba_7dd9,
                 time_mid: 0xa689,
                 time_hi_and_version: 0x11e1,
                 clock_seq_hi_and_reserved: 0xbd,
@@ -81,7 +81,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x516e7cb5,
+                time_low: 0x516e_7cb5,
                 time_mid: 0x6ecf,
                 time_hi_and_version: 0x11d6,
                 clock_seq_hi_and_reserved: 0x8f,
@@ -92,7 +92,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x516e7cb6,
+                time_low: 0x516e_7cb6,
                 time_mid: 0x6ecf,
                 time_hi_and_version: 0x11d6,
                 clock_seq_hi_and_reserved: 0x8f,
@@ -103,7 +103,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x516e7cb8,
+                time_low: 0x516e_7cb8,
                 time_mid: 0x6ecf,
                 time_hi_and_version: 0x11d6,
                 clock_seq_hi_and_reserved: 0x8f,
@@ -114,7 +114,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x516e7cba,
+                time_low: 0x516e_7cba,
                 time_mid: 0x6ecf,
                 time_hi_and_version: 0x11d6,
                 clock_seq_hi_and_reserved: 0x8f,
@@ -125,7 +125,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x9e1a2d38,
+                time_low: 0x9e1a_2d38,
                 time_mid: 0xc612,
                 time_hi_and_version: 0x4316,
                 clock_seq_hi_and_reserved: 0xaa,
@@ -136,7 +136,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xebd0a0a2,
+                time_low: 0xebd0_a0a2,
                 time_mid: 0xb9e5,
                 time_hi_and_version: 0x4433,
                 clock_seq_hi_and_reserved: 0x87,
@@ -147,7 +147,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xaf9b60a0,
+                time_low: 0xaf9b_60a0,
                 time_mid: 0x1431,
                 time_hi_and_version: 0x4f62,
                 clock_seq_hi_and_reserved: 0xbc,
@@ -158,7 +158,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x5808c8aa,
+                time_low: 0x5808_c8aa,
                 time_mid: 0x7e8f,
                 time_hi_and_version: 0x42e0,
                 clock_seq_hi_and_reserved: 0x85,
@@ -169,7 +169,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xde94bba4,
+                time_low: 0xde94_bba4,
                 time_mid: 0x06d1,
                 time_hi_and_version: 0x4d40,
                 clock_seq_hi_and_reserved: 0xa1,
@@ -180,7 +180,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xe3c9e316,
+                time_low: 0xe3c9_e316,
                 time_mid: 0x0b5c,
                 time_hi_and_version: 0x4db8,
                 clock_seq_hi_and_reserved: 0x81,
@@ -191,7 +191,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xe75caf8f,
+                time_low: 0xe75c_af8f,
                 time_mid: 0xf680,
                 time_hi_and_version: 0x4cee,
                 clock_seq_hi_and_reserved: 0xaf,
@@ -202,7 +202,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x0fc63daf,
+                time_low: 0x0fc6_3daf,
                 time_mid: 0x8483,
                 time_hi_and_version: 0x4772,
                 clock_seq_hi_and_reserved: 0x8e,
@@ -213,7 +213,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xa19d880f,
+                time_low: 0xa19d_880f,
                 time_mid: 0x05fc,
                 time_hi_and_version: 0x4d3b,
                 clock_seq_hi_and_reserved: 0xa0,
@@ -224,7 +224,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x0657fd6d,
+                time_low: 0x0657_fd6d,
                 time_mid: 0xa4ab,
                 time_hi_and_version: 0x43c4,
                 clock_seq_hi_and_reserved: 0x84,
@@ -235,7 +235,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xe6d6d379,
+                time_low: 0xe6d6_d379,
                 time_mid: 0xf507,
                 time_hi_and_version: 0x44c2,
                 clock_seq_hi_and_reserved: 0xa2,
@@ -246,7 +246,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xaa31e02a,
+                time_low: 0xaa31_e02a,
                 time_mid: 0x400f,
                 time_hi_and_version: 0x11db,
                 clock_seq_hi_and_reserved: 0x95,
@@ -257,7 +257,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x9d275380,
+                time_low: 0x9d27_5380,
                 time_mid: 0x40ad,
                 time_hi_and_version: 0x11db,
                 clock_seq_hi_and_reserved: 0xbf,
@@ -268,7 +268,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x9198effc,
+                time_low: 0x9198_effc,
                 time_mid: 0x31c0,
                 time_hi_and_version: 0x11db,
                 clock_seq_hi_and_reserved: 0x8f,
@@ -279,7 +279,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x381cfccc,
+                time_low: 0x381c_fccc,
                 time_mid: 0x7288,
                 time_hi_and_version: 0x11e0,
                 clock_seq_hi_and_reserved: 0x92,
@@ -290,7 +290,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x426F6F74,
+                time_low: 0x426F_6F74,
                 time_mid: 0x0000,
                 time_hi_and_version: 0x11aa,
                 clock_seq_hi_and_reserved: 0xaa,
@@ -301,7 +301,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x48465300,
+                time_low: 0x4846_5300,
                 time_mid: 0x0000,
                 time_hi_and_version: 0x11aa,
                 clock_seq_hi_and_reserved: 0xaa,
@@ -312,7 +312,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x55465300,
+                time_low: 0x5546_5300,
                 time_mid: 0x0000,
                 time_hi_and_version: 0x11aa,
                 clock_seq_hi_and_reserved: 0xaa,
@@ -323,7 +323,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x6a898cc3,
+                time_low: 0x6a89_8cc3,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
                 clock_seq_hi_and_reserved: 0x99,
@@ -334,7 +334,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x52414944,
+                time_low: 0x5241_4944,
                 time_mid: 0x0000,
                 time_hi_and_version: 0x11aa,
                 clock_seq_hi_and_reserved: 0xaa,
@@ -345,7 +345,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x52414944,
+                time_low: 0x5241_4944,
                 time_mid: 0x5f4f,
                 time_hi_and_version: 0x11aa,
                 clock_seq_hi_and_reserved: 0xaa,
@@ -356,7 +356,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x4C616265,
+                time_low: 0x4C61_6265,
                 time_mid: 0x6c00,
                 time_hi_and_version: 0x11aa,
                 clock_seq_hi_and_reserved: 0xaa,
@@ -367,7 +367,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x5265636f,
+                time_low: 0x5265_636f,
                 time_mid: 0x7665,
                 time_hi_and_version: 0x11AA,
                 clock_seq_hi_and_reserved: 0xaa,
@@ -378,7 +378,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x53746f72,
+                time_low: 0x5374_6f72,
                 time_mid: 0x6167,
                 time_hi_and_version: 0x11AA,
                 clock_seq_hi_and_reserved: 0xaa,
@@ -389,7 +389,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x7c3457ef,
+                time_low: 0x7c34_57ef,
                 time_mid: 0x0000,
                 time_hi_and_version: 0x11aa,
                 clock_seq_hi_and_reserved: 0xaa,
@@ -400,7 +400,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x49f48d5a,
+                time_low: 0x49f4_8d5a,
                 time_mid: 0xb10e,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0xb9,
@@ -411,7 +411,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x49f48d82,
+                time_low: 0x49f4_8d82,
                 time_mid: 0xb10e,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0xb9,
@@ -422,7 +422,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x49f48d32,
+                time_low: 0x49f4_8d32,
                 time_mid: 0xb10e,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0xB9,
@@ -433,7 +433,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x49f48daa,
+                time_low: 0x49f4_8daa,
                 time_mid: 0xb10e,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0xb9,
@@ -444,7 +444,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x2db519c4,
+                time_low: 0x2db5_19c4,
                 time_mid: 0xb10f,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0xb9,
@@ -455,7 +455,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x2db519ec,
+                time_low: 0x2db5_19ec,
                 time_mid: 0xb10f,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0xb9,
@@ -466,7 +466,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x9d087404,
+                time_low: 0x9d08_7404,
                 time_mid: 0x1ca5,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0x88,
@@ -477,7 +477,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x9d58fdbd,
+                time_low: 0x9d58_fdbd,
                 time_mid: 0x1ca5,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0x88,
@@ -488,7 +488,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x9d94ce7c,
+                time_low: 0x9d94_ce7c,
                 time_mid: 0x1ca5,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0x88,
@@ -499,7 +499,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x9dd4478f,
+                time_low: 0x9dd4_478f,
                 time_mid: 0x1ca5,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0x88,
@@ -510,7 +510,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xdbd5211b,
+                time_low: 0xdbd5_211b,
                 time_mid: 0x1ca5,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0x88,
@@ -521,7 +521,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x3d48ce54,
+                time_low: 0x3d48_ce54,
                 time_mid: 0x1d16,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0x86,
@@ -532,7 +532,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xbd215ab2,
+                time_low: 0xbd21_5ab2,
                 time_mid: 0x1d16,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0x86,
@@ -543,7 +543,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x61dc63ac,
+                time_low: 0x61dc_63ac,
                 time_mid: 0x6e38,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0x85,
@@ -554,7 +554,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x5cbb9ad1,
+                time_low: 0x5cbb_9ad1,
                 time_mid: 0x862d,
                 time_hi_and_version: 0x11dc,
                 clock_seq_hi_and_reserved: 0xa9,
@@ -565,7 +565,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xcab6e88e,
+                time_low: 0xcab6_e88e,
                 time_mid: 0xabf3,
                 time_hi_and_version: 0x4102,
                 clock_seq_hi_and_reserved: 0xa0,
@@ -576,7 +576,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0xfe3a2a5d,
+                time_low: 0xfe3a_2a5d,
                 time_mid: 0x4f32,
                 time_hi_and_version: 0x41a7,
                 clock_seq_hi_and_reserved: 0xb7,
@@ -587,7 +587,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x2e0a753d,
+                time_low: 0x2e0a_753d,
                 time_mid: 0x9e48,
                 time_hi_and_version: 0x43b0,
                 clock_seq_hi_and_reserved: 0x83,
@@ -598,7 +598,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x3cb8e202,
+                time_low: 0x3cb8_e202,
                 time_mid: 0x3b7e,
                 time_hi_and_version: 0x47dd,
                 clock_seq_hi_and_reserved: 0x8a,
@@ -609,7 +609,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x824cc7a0,
+                time_low: 0x824c_c7a0,
                 time_mid: 0x36a8,
                 time_hi_and_version: 0x11e3,
                 clock_seq_hi_and_reserved: 0x89,
@@ -620,7 +620,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x6a82cb45,
+                time_low: 0x6a82_cb45,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
                 clock_seq_hi_and_reserved: 0x99,
@@ -631,7 +631,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x6a85cf4d,
+                time_low: 0x6a85_cf4d,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
                 clock_seq_hi_and_reserved: 0x99,
@@ -642,7 +642,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x6a87c46f,
+                time_low: 0x6a87_c46f,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
                 clock_seq_hi_and_reserved: 0x99,
@@ -653,7 +653,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x6a8b642b,
+                time_low: 0x6a8b_642b,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
                 clock_seq_hi_and_reserved: 0x99,
@@ -664,7 +664,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x6a8ef2e9,
+                time_low: 0x6a8e_f2e9,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
                 clock_seq_hi_and_reserved: 0x99,
@@ -675,7 +675,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x6a90ba39,
+                time_low: 0x6a90_ba39,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
                 clock_seq_hi_and_reserved: 0x99,
@@ -686,7 +686,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x6a9283a5,
+                time_low: 0x6a92_83a5,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
                 clock_seq_hi_and_reserved: 0x99,
@@ -697,7 +697,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x6a945a3b,
+                time_low: 0x6a94_5a3b,
                 time_mid: 0x1dd2,
                 time_hi_and_version: 0x11b2,
                 clock_seq_hi_and_reserved: 0x99,
@@ -708,7 +708,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
         },
         KnownUuid {
             uuid: uuid::Uuid {
-                time_low: 0x21686148,
+                time_low: 0x2168_6148,
                 time_mid: 0x6449,
                 time_hi_and_version: 0x6e6f,
                 clock_seq_hi_and_reserved: 0x74,
@@ -723,7 +723,7 @@ fn get_known_uuid() -> [KnownUuid; 64] {
 pub(crate) fn known_uuid_to_str(uuid: &uuid::Uuid) -> &'static str {
     assert!(is_le());
 
-    for x in get_known_uuid().iter() {
+    for x in &get_known_uuid() {
         if *uuid == x.uuid {
             assert!(x.name.len() <= 36);
             return x.name;
@@ -778,7 +778,7 @@ mod tests {
     #[test]
     fn test_known_uuid_to_str() {
         let u = uuid::Uuid {
-            time_low: 0x516e7cb4,
+            time_low: 0x516e_7cb4,
             time_mid: 0x6ecf,
             time_hi_and_version: 0x11d6,
             clock_seq_hi_and_reserved: 0x8f,
@@ -788,7 +788,7 @@ mod tests {
         assert_eq!(super::known_uuid_to_str(&u), "FREEBSD");
 
         let u = uuid::Uuid {
-            time_low: 0x416e7cb4,
+            time_low: 0x416e_7cb4,
             time_mid: 0x6ecf,
             time_hi_and_version: 0x11d6,
             clock_seq_hi_and_reserved: 0x8f,

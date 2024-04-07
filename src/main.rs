@@ -2,7 +2,7 @@ mod gpt;
 mod subr;
 mod uuid;
 
-const VERSION: [i32; 3] = [0, 1, 6];
+const VERSION: [i32; 3] = [0, 1, 7];
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
@@ -21,10 +21,10 @@ fn print_version() {
     println!("{}", get_version_string());
 }
 
-fn usage(progname: &str, opts: getopts::Options) {
+fn usage(progname: &str, opts: &getopts::Options) {
     print!(
         "{}",
-        opts.usage(&format!("usage: {} [<options>] <paths>", progname))
+        opts.usage(&format!("usage: {progname} [<options>] <paths>"))
     );
 }
 
@@ -52,7 +52,7 @@ fn main() {
         std::process::exit(1);
     }
     if matches.opt_present("h") {
-        usage(&progname, opts);
+        usage(&progname, &opts);
         std::process::exit(1);
     }
 
@@ -68,12 +68,12 @@ fn main() {
     }
 
     if matches.free.is_empty() {
-        usage(&progname, opts);
+        usage(&progname, &opts);
         std::process::exit(1);
     }
 
     let device = &matches.free[0];
-    println!("{}", device);
+    println!("{device}");
     println!();
 
     if let Err(e) = gpt::dump_gpt(&mut std::fs::File::open(device).unwrap(), &opt) {

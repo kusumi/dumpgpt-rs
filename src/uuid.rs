@@ -47,7 +47,7 @@ mod tests {
         );
 
         let u = super::Uuid {
-            time_low: 0x516e7cb4,
+            time_low: 0x516e_7cb4,
             time_mid: 0x6ecf,
             time_hi_and_version: 0x11d6,
             clock_seq_hi_and_reserved: 0x8f,
