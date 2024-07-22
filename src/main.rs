@@ -2,7 +2,7 @@ mod gpt;
 mod subr;
 mod uuid;
 
-const VERSION: [i32; 3] = [0, 1, 7];
+const VERSION: [i32; 3] = [0, 1, 8];
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
@@ -30,7 +30,7 @@ fn usage(progname: &str, opts: &getopts::Options) {
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    let progname = args[0].clone();
+    let progname = &args[0];
 
     subr::assert_ds();
 
@@ -46,13 +46,20 @@ fn main() {
     opts.optflag("v", "version", "Print version and exit");
     opts.optflag("h", "help", "Print usage and exit");
 
-    let matches = opts.parse(&args[1..]).unwrap();
+    let matches = match opts.parse(&args[1..]) {
+        Ok(v) => v,
+        Err(e) => {
+            println!("{e}");
+            usage(progname, &opts);
+            std::process::exit(1);
+        }
+    };
     if matches.opt_present("v") {
         print_version();
         std::process::exit(1);
     }
     if matches.opt_present("h") {
-        usage(&progname, &opts);
+        usage(progname, &opts);
         std::process::exit(1);
     }
 
@@ -68,7 +75,7 @@ fn main() {
     }
 
     if matches.free.is_empty() {
-        usage(&progname, &opts);
+        usage(progname, &opts);
         std::process::exit(1);
     }
 
@@ -76,7 +83,14 @@ fn main() {
     println!("{device}");
     println!();
 
-    if let Err(e) = gpt::dump_gpt(&mut std::fs::File::open(device).unwrap(), &opt) {
-        panic!("{}", e);
+    let mut fp = match std::fs::File::open(device) {
+        Ok(v) => v,
+        Err(e) => {
+            println!("{e}");
+            std::process::exit(1);
+        }
+    };
+    if let Err(e) = gpt::dump_gpt(&mut fp, &opt) {
+        panic!("{e}");
     }
 }

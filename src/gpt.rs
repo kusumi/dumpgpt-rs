@@ -79,14 +79,14 @@ fn try_known_uuid_to_str(uuid: &uuid::Uuid, opt: &Opt) -> String {
 
 fn alloc_buffer() -> Vec<u8> {
     let buf = vec![0; UNIT_SIZE];
-    assert!(buf.len() == UNIT_SIZE);
-    assert!(buf.len() % 512 == 0);
+    assert_eq!(buf.len(), UNIT_SIZE);
+    assert_eq!(buf.len() % 512, 0);
     buf
 }
 
 fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, opt: &Opt) -> Result<GptHdr> {
     let mut buf = alloc_buffer();
-    let hdr_offset = hdr_lba * u64::try_from(buf.len()).unwrap();
+    let hdr_offset = hdr_lba * u64::try_from(buf.len())?;
     fp.seek(std::io::SeekFrom::Start(hdr_offset))?;
     fp.read_exact(&mut buf)?;
 
@@ -140,8 +140,7 @@ fn dump_header(fp: &mut std::fs::File, hdr_lba: u64, opt: &Opt) -> Result<GptHdr
 }
 
 fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, opt: &Opt) -> Result<()> {
-    let lba_table_size =
-        usize::try_from(hdr.hdr_entsz).unwrap() * usize::try_from(hdr.hdr_entries).unwrap();
+    let lba_table_size = usize::try_from(hdr.hdr_entsz)? * usize::try_from(hdr.hdr_entries)?;
     let lba_table_sectors = lba_table_size / UNIT_SIZE;
     let mut total = 0;
 
@@ -152,12 +151,11 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, opt: &Opt) -> Result<()> {
 
     for i in 0..lba_table_sectors {
         let mut buf = alloc_buffer();
-        let offset =
-            (hdr.hdr_lba_table + u64::try_from(i).unwrap()) * u64::try_from(buf.len()).unwrap();
+        let offset = (hdr.hdr_lba_table + u64::try_from(i)?) * u64::try_from(buf.len())?;
         fp.seek(std::io::SeekFrom::Start(offset))?;
         fp.read_exact(&mut buf)?;
 
-        let sector_entries = buf.len() / usize::try_from(hdr.hdr_entsz).unwrap();
+        let sector_entries = buf.len() / usize::try_from(hdr.hdr_entsz)?;
 
         for j in 0..sector_entries {
             let p = &buf[std::mem::size_of::<GptEnt>() * j..];
@@ -172,9 +170,9 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, opt: &Opt) -> Result<()> {
 
             let mut name = [0u8; 36];
             let mut nlen = 0;
-            assert!(p.ent_name.len() == name.len());
+            assert_eq!(p.ent_name.len(), name.len());
             for (k, v) in name.iter_mut().enumerate() {
-                *v = (p.ent_name[k] & 0xFF).try_into().unwrap(); // XXX ascii
+                *v = (p.ent_name[k] & 0xFF).try_into()?; // XXX ascii
                 if *v == 0 {
                     nlen = k;
                     break;
@@ -194,7 +192,7 @@ fn dump_entries(fp: &mut std::fs::File, hdr: &GptHdr, opt: &Opt) -> Result<()> {
             total += 1;
         }
     }
-    assert!(total == hdr.hdr_entries);
+    assert_eq!(total, hdr.hdr_entries);
     Ok(())
 }
 

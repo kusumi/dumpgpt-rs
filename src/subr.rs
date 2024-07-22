@@ -737,9 +737,9 @@ pub(crate) fn is_le() -> bool {
 }
 
 pub(crate) fn assert_ds() {
-    assert!(std::mem::size_of::<gpt::GptHdr>() == 92 + 4);
-    assert!(std::mem::size_of::<gpt::GptEnt>() == 128);
-    assert!(std::mem::size_of::<uuid::Uuid>() == 16);
+    assert_eq!(std::mem::size_of::<gpt::GptHdr>(), 92 + 4);
+    assert_eq!(std::mem::size_of::<gpt::GptEnt>(), 128);
+    assert_eq!(std::mem::size_of::<uuid::Uuid>(), 16);
 }
 
 #[cfg(test)]
